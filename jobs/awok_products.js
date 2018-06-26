@@ -6,9 +6,9 @@ const vo = require('vo');
 const lib = require('../lib');
 const siteName = "awok";
 
-lib.start(siteName, getProductLinks);
+lib.start(siteName, getProducts, getLinks);
 
-async function getProductLinks(gotoUrl) {
+async function getProducts(gotoUrl) {
 
   await nightmare.goto(gotoUrl);
 
@@ -61,4 +61,52 @@ async function getProductLinks(gotoUrl) {
         .wait(3000);
     }
   }
+}
+
+
+/* 
+* get links 
+*/
+async function getLinks() {
+
+  var nightmare = Nightmare();
+  var aaa = [
+    "https://ae.awok.com/babies-kids-games/ds-1025/"
+  ];
+
+  for (let linkUrl of aaa) {
+
+    console.log(linkUrl);
+
+    await nightmare
+      .goto(`${linkUrl}`)
+      .wait(2000)
+      .evaluate(function () {
+        // get only baby prducts
+        var brandPageList = document.querySelectorAll('.sub_cat .disableonclick');
+        var brandPageLinks = [];
+        brandPageList.forEach(function (item) {
+          brandPageLinks.push({
+            "name": item.innerText.trim(),
+            "url": window.location.origin + item.getAttribute('data-loadurl'),
+            "site": "awok",
+            "scrap": false
+          });
+        });
+
+        return brandPageLinks;
+      })
+      .end()
+      .then(function (result) {
+        vo(lib.linksPrepToSave)(result, function (err) {
+          console.log(err)
+          if (err) throw err;
+        });
+      })
+      .catch(function (error) {
+        console.error('Error:', error);
+      });
+
+  }
+
 }
