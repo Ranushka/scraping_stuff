@@ -17,16 +17,16 @@ async function getProductLinks(gotoUrl) {
   while (haveMore) {
 
     // loging scraping site url
-    var url = yield nightmare.url();
+    var url = await nightmare.url();
     console.log(url);
 
-    yield nightmare
+    await nightmare
       .wait(4000)
       .evaluate(function () {
 
         var links = [],
           productList = document.querySelectorAll('[class*="ProductBox__wrapper"] a'),
-          nextExists = document.querySelectorAll('[class*="Pagination__nextLink"]')[0].parentElement.offsetWidth > 0;
+          pagination = document.querySelectorAll('[class*="Pagination__nextLink"]')[0].parentElement.offsetWidth > 0;
 
         // going through each product
         productList.forEach(function (item) {

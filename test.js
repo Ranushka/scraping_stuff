@@ -1,55 +1,25 @@
 'use strict';
 
 
+const testFolder = `${__dirname}/jobs/`;
+const fs = require('fs');
 
-const fetch = require('node-fetch');
-var abc = ['https://api.github.com/repos/jasonrudolph/keyboard', 'https://api.github.com/repos/zeit/next.js', 'https://api.github.com/repos/vuejs/vue'];
-
-
-
-
-// start function*(){
-//   const promises = myArray.map(async (myValue) => {
-//     return {
-//       id: "my_id",
-//       myValue: await service.getByValue(myValue)
-//     }
-//   });
-//   return Promise.all(promises);
-// }
-
-const promises = abc.map(async (myValue) => {
-  return {
-    myValue: await service.getByValue(myValue)
-  }
-});
-
-return Promise.all(promises);
+const util = require('util');
+const exec = util.promisify(require('child_process').exec);
 
 
-abc.forEach(async (ab) => {
-  var urls = await oneByone(ab);
 
-  if (urls.length) {
-    oneByTwo.forEach(async (item) => {
-      if (item.length) {
-        var oneByTwo = await oneByTwo(item);
-        console.log('count - ', oneByTwo);
-      }
-    })
+async function ls(cmnd) {
+  await exec(cmnd);
+}
+
+fs.readdir(testFolder, async (err, files) => {
+
+  for (let index of files) {
+    console.log(index)
+    var cmnd = `pm2 start ${testFolder+index} --no-autorestart -i 3`;
+    console.log(cmnd);
+    await ls(cmnd);
   }
 
 })
-
-async function oneByone(params) {
-  const res = await fetch(params);
-  const json = await res.json();
-  console.log('start - ', json.stargazers_count);
-  return [json.stargazers_url, json.subscribers_url, json.tags_url];
-}
-
-async function oneByTwo(params) {
-  const res = await fetch(params);
-  const json = await res.json();
-  return json.length;
-}
