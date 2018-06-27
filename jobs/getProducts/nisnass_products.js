@@ -6,15 +6,21 @@ const vo = require('vo');
 const lib = require('../../lib');
 const siteName = "nisnass";
 
+lib.start(siteName, getProductLinks);
+
 async function getProductLinks(gotoUrl) {
 
   await nightmare.goto(gotoUrl);
 
-  // loging scraping site url
+  //
+  // ─── NOW SCRAPING SITE URL ────────────────────────────────────
+  //
   var url = await nightmare.url();
   console.log(url);
 
-  // scroll to the end
+  //
+  // ─── SCROOL INFINITE SCROLL TO END ──────────────────────────────────────────────
+  //
   var previousHeight, currentHeight = 0;
   while (previousHeight !== currentHeight) {
     previousHeight = currentHeight;
@@ -25,6 +31,9 @@ async function getProductLinks(gotoUrl) {
       .wait(2000);
   }
 
+  //
+  // ─── START SCRAPING ─────────────────────────────────────────────────────────────
+  //
   await nightmare
     .wait(3000)
     .evaluate(function () {
@@ -32,7 +41,9 @@ async function getProductLinks(gotoUrl) {
       var links = [],
         productList = document.querySelectorAll('.PLP-productList .Product');
 
-      // going through each product
+      //
+      // GOING THROUGH EACH PRODUCT
+      //
       productList.forEach(function (item) {
         links.push({
           "name": item.getElementsByClassName("Product-name")[0].innerText.trim(),
@@ -43,22 +54,14 @@ async function getProductLinks(gotoUrl) {
         });
       });
 
-      // return all the values
+      //
+      // RETURN ALL THE VALUES
+      //
       return {
-        'links': links,
-        'nextExists': nextExists
+        'links': links
       };
 
     }).then(function (resalt) {
-      lib.nextExists = resalt.nextExists;
-      vo(lib.saveToDb)(resalt.links, function (err, result) {
-        if (err) throw err;
-      });
-    })
-
-  nightmare.end();
+      lib.PrepToSave(resalt.links);
+    });
 }
-
-
-
-lib.start(siteName, getProductLinks);

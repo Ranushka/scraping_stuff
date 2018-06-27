@@ -14,9 +14,14 @@ async function getProductLinks(gotoUrl) {
 
   var haveMore = true;
 
+  //
+  // ─── GO WHILE SCRAPING COMPLEAT THE PAGINATION ON THE LINK A LINK ───────────────
+  //
   while (haveMore) {
 
-    // loging scraping site url
+  //
+  // ─── NOW SCRAPING SITE URL ────────────────────────────────────
+  //
     var url = await nightmare.url();
     console.log(url);
 
@@ -25,30 +30,25 @@ async function getProductLinks(gotoUrl) {
       .evaluate(function (siteName, result) {
 
         var links = [],
-          productList,
-          pagination = '';
+          productList = document.querySelectorAll('.products-grid a.product-image'),
+          pagination = document.querySelectorAll('.toolbar .sprite_img.next.i-next').length > 0;
 
-          try {
+        //
+        // GOING THROUGH EACH PRODUCT
+        //
+        productList.forEach(function (item) {
+          links.push({
+            "name": item.title,
+            "url": item.href,
+            "price": item.dataset.pprice,
+            "brand": item.dataset.pbrand,
+            "site": siteName,
+          });
+        });
 
-            productList = document.querySelectorAll('.products-grid a.product-image'),
-            pagination = document.querySelectorAll('.toolbar .sprite_img.next.i-next').length > 0;
-
-            // going through each product
-            productList.forEach(function (item) {
-              links.push({
-                "name": item.title,
-                "url": item.href,
-                "price": item.dataset.pprice,
-                "brand": item.dataset.pbrand,
-                "site": siteName,
-              });
-            });
-
-          } catch (error) {
-            
-          }
-
-        // return all the values
+        //
+        // RETURN ALL THE VALUES
+        //
         return {
           'links': links,
           'pagination': pagination
@@ -56,11 +56,12 @@ async function getProductLinks(gotoUrl) {
 
       }).then(function (resalt) {
         haveMore = resalt.pagination;
-        vo(lib.saveToDb)(resalt.links, function (err, result) {
-          if (err) throw err;
-        });
+        lib.PrepToSave(resalt.links);
       })
 
+    //
+    // ─── CHECK HAVE MORE TO THE PAGE ─────────────────────────────────
+    //
     if (haveMore) {
       console.log('haveMore');
       await nightmare
@@ -71,4 +72,3 @@ async function getProductLinks(gotoUrl) {
     }
   }
 }
-

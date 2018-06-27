@@ -14,9 +14,14 @@ async function getProductLinks(gotoUrl) {
 
   var haveMore = true;
 
+  //
+  // ─── GO WHILE SCRAPING COMPLEAT THE PAGINATION ON THE LINK A LINK ───────────────
+  //
   while (haveMore) {
 
-    // loging scraping site url
+    //
+    // ─── LOGING SCRAPING SITE URL ────────────────────────────────────
+    //
     var url = await nightmare.url();
     console.log(url);
 
@@ -29,7 +34,9 @@ async function getProductLinks(gotoUrl) {
           tags = document.querySelectorAll('.heading_section')[0].innerText.trim(),
           pagination = document.querySelectorAll('.modern-page-next').length > 0;
 
-        // going through each product
+        //
+        // GOING THROUGH EACH PRODUCT
+        //
         productList.forEach(function (item) {
           links.push({
             "name": item.getElementsByClassName('productslist_item_title')[0].innerText.trim(),
@@ -40,7 +47,9 @@ async function getProductLinks(gotoUrl) {
           });
         });
 
-        // return all the values
+        //
+        // RETURN ALL THE VALUES
+        //
         return {
           'links': links,
           'pagination': pagination
@@ -48,13 +57,12 @@ async function getProductLinks(gotoUrl) {
 
       }).then(function (resalt) {
         haveMore = resalt.pagination;
-
         lib.PrepToSave(resalt.links);
-        // vo(lib.PrepToSave)(resalt.links, function (err, result) {
-        //   if (err) throw err;
-        // });
       })
 
+    //
+    // ─── CHECK HAVE MORE TO THE PAGE ─────────────────────────────────
+    //  
     if (haveMore) {
       await nightmare
         .evaluate(function () {

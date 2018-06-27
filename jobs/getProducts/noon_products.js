@@ -14,9 +14,11 @@ async function getProductLinks(gotoUrl) {
 
   var haveMore = true;
 
+  //
+  // ─── GO WHILE SCRAPING COMPLEAT THE PAGINATION ON THE LINK A LINK ───────────────
+  //
   while (haveMore) {
 
-    // loging scraping site url
     var url = await nightmare.url();
     console.log(url);
 
@@ -47,9 +49,7 @@ async function getProductLinks(gotoUrl) {
 
       }).then(function (resalt) {
         haveMore = resalt.pagination;
-        vo(lib.saveToDb)(resalt.links, function (err, result) {
-          if (err) throw err;
-        });
+        lib.PrepToSave(resalt.links);
       })
 
     if (haveMore) {
@@ -62,8 +62,3 @@ async function getProductLinks(gotoUrl) {
     }
   }
 }
-
-
-
-
-
