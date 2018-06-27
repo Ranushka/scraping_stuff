@@ -3,7 +3,7 @@
 const Nightmare = require('nightmare');
 const nightmare = Nightmare();
 const vo = require('vo');
-const lib = require('../lib');
+const lib = require('../../lib');
 const siteName = "nisnass";
 
 async function getProductLinks(gotoUrl) {

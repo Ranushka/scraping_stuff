@@ -3,7 +3,7 @@
 const Nightmare = require('nightmare');
 const nightmare = Nightmare();
 const vo = require('vo');
-const lib = require('../lib');
+const lib = require('../../lib');
 const siteName = "awok";
 
 lib.start(siteName, getProductLinks);
@@ -48,9 +48,11 @@ async function getProductLinks(gotoUrl) {
 
       }).then(function (resalt) {
         haveMore = resalt.pagination;
-        vo(lib.saveToDb)(resalt.links, function (err, result) {
-          if (err) throw err;
-        });
+
+        lib.PrepToSave(resalt.links);
+        // vo(lib.PrepToSave)(resalt.links, function (err, result) {
+        //   if (err) throw err;
+        // });
       })
 
     if (haveMore) {
