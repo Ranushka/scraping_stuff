@@ -42,7 +42,7 @@ var self = {
     var canGo = await this.remainScrapeLinksCount(siteName);
 
     if (!canGo.response) {
-      await getProduct();
+      await this.resetScrapeLinks(siteName);
     }
 
     let i = 0;
