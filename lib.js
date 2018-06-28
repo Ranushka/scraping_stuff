@@ -23,6 +23,26 @@ var self = {
       });
   },
 
+  startPm2: async function (fileName) {
+    pm2.connect(function (err) {
+      if (err) {
+        console.error(err)
+        process.exit(2)
+      }
+
+      pm2.start({
+        script: fileName,
+        instances: 3,
+        autorestart: false,
+      }, (err, apps) => {
+        pm2.disconnect()
+        if (err) {
+          throw err
+        }
+      })
+    });
+  },
+
   resetScrapeLinks: async function (siteName) {
     // TODO: need to do 
     // return;
@@ -38,12 +58,6 @@ var self = {
 
   start: async function (siteName, getProduct, getLinks) {
     console.log('kicking off');
-
-    var canGo = await this.remainScrapeLinksCount(siteName);
-
-    if (!canGo.response) {
-      await this.resetScrapeLinks(siteName);
-    }
 
     let i = 0;
     let nextMainLink = true;
