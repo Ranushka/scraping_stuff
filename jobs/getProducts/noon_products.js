@@ -49,7 +49,7 @@ async function getProductLinks(gotoUrl) {
 
       }).then(function (resalt) {
         haveMore = resalt.pagination;
-        lib.PrepToSave(resalt.links);
+        lib.PrepToSave(resalt.links, 'https://sitedata-mum.herokuapp.com/api/products');
       })
 
     if (haveMore) {

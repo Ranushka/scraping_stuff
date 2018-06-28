@@ -62,6 +62,6 @@ async function getProductLinks(gotoUrl) {
       };
 
     }).then(function (resalt) {
-      lib.PrepToSave(resalt.links);
+      lib.PrepToSave(resalt.links, 'https://sitedata-mum.herokuapp.com/api/products');
     });
 }

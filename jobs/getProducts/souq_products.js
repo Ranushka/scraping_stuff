@@ -1,29 +1,36 @@
+'use strict';
 
-function* getProductLinks(catLists) {
+const Nightmare = require('nightmare');
+const nightmare = Nightmare();
+const lib = require('../../lib');
+const siteName = "souq";
 
+lib.start(siteName, getProductLinks);
+
+async function getProductLinks(gotoUrl) {
+
+  /** Visiting the first link */
+  await nightmare.goto(gotoUrl);
+
+  var haveMore = true;
   var pageNum = 1;
-  var gotoUrl = catLists;
-  var nightmare = Nightmare(),
-    allLinks = [];
+  
+  /** if page has pagination */
+  while (haveMore) {
 
-  while (nextExists) {
+    /** Log current scraping url */
+    console.log(await nightmare.url());
 
-    let scrapedData = yield nightmare
-      .goto(gotoUrl)
+    /** Start scraping the current url */
+    await nightmare
       .wait(3000)
-
-    // loging scraping site url
-    var url = yield nightmare.url();
-    console.log(url);
-
-    yield nightmare
       .evaluate(function () {
 
         var links = [],
-          nextExists = window.location.search != "",
+          pagination = window.location.search != "",
           productList = document.querySelectorAll('.block-grid-large');
 
-        // going through each product
+        /** Going through each product */
         productList.forEach(function (item) {
           links.push({
             "name": item.querySelectorAll('.itemTitle a')[0].innerText.trim(),
@@ -34,31 +41,22 @@ function* getProductLinks(catLists) {
           });
         });
 
-        // return all the values
+        /** Return all the values */
         return {
           'links': links,
-          'nextExists': nextExists
+          'pagination': pagination
         };
 
-      }).then(async function (resalt) {
-        nextExists = resalt.nextExists;
-        if (nextExists) {
-          await saveToDb(resalt.links);
-        }
-
+      }).then(function (resalt) {
+        haveMore = resalt.pagination;
+        lib.PrepToSave(resalt.links, 'https://sitedata-mum.herokuapp.com/api/products');
       })
 
-    if (nextExists) {
-
-      var url = yield nightmare.url();
-      pageNum++;
-      gotoUrl = `${catLists}?section=2&page=${pageNum}`;
-      yield nightmare
-        .goto(gotoUrl)
-        .wait(3000)
-
+    /** Visiting the next page */
+    if (haveMore) {
+      await nightmare
+      .goto(`${gotoUrl}?section=2&page=${pageNum++}`);
     }
 
   }
-
 }

@@ -24,23 +24,23 @@ var self = {
   },
 
   startPm2: async function (fileName) {
-    pm2.connect(function (err) {
-      if (err) {
-        console.error(err)
-        process.exit(2)
-      }
+    // pm2.connect(function (err) {
+    //   if (err) {
+    //     console.error(err)
+    //     process.exit(2)
+    //   }
 
-      pm2.start({
-        script: fileName,
-        instances: 3,
-        autorestart: false,
-      }, (err, apps) => {
-        pm2.disconnect()
-        if (err) {
-          throw err
-        }
-      })
-    });
+    //   pm2.start({
+    //     script: fileName,
+    //     instances: 3,
+    //     autorestart: false,
+    //   }, (err, apps) => {
+    //     pm2.disconnect()
+    //     if (err) {
+    //       throw err
+    //     }
+    //   })
+    // });
   },
 
   resetScrapeLinks: async function (siteName) {
@@ -86,13 +86,23 @@ var self = {
 
   },
 
-  PrepToSave: async function (result) {
+  getNewScrapURL: async function (siteName) {
+    return fetch(`https://sitedata-mum.herokuapp.com/api/links/nextScrapLink?site=${siteName}`, {
+        method: 'GET'
+      })
+      .then(res => res.json())
+      .then(json => {
+        return json;
+      });
+  },
+
+  PrepToSave: async function (result, apiUrlTosave) {
 
     console.log('products_PrepToSave', result.length);
 
     var i, j = [],
       self = this,
-      saveUrl = 'https://sitedata-mum.herokuapp.com/api/products',
+      saveUrl = apiUrlTosave,
       chunk = 100;
 
     // split data to save efactivly
@@ -116,16 +126,6 @@ var self = {
         self.saveToDb(saveUrl, jsonData);
       }
     }
-  },
-
-  getNewScrapURL: async function (siteName) {
-    return fetch(`https://sitedata-mum.herokuapp.com/api/links/nextScrapLink?site=${siteName}`, {
-        method: 'GET'
-      })
-      .then(res => res.json())
-      .then(json => {
-        return json;
-      });
   },
 
   saveToDb: async function (saveUrl, jsonData) {
