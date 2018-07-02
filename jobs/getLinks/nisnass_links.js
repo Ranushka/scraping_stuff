@@ -61,7 +61,7 @@ function* getMultipalSoursLinks(params) {
 
 function* saveToDb(params) {
   console.log(params)
-  return yield fetch('https://sitedata-mum.herokuapp.com/api/links', {
+  return yield fetch(`${lib.APIbaseUrl}/api/links`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

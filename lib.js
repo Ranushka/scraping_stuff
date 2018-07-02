@@ -8,13 +8,13 @@ const crypto = require('crypto');
 
 // xvfb.startSync();
 
-// http://localhost:3789/api/links/remainScrapeLinksCount?site=mumzworld
-
 var self = {
   nextExists: true,
+  APIbaseUrl: "https://sitedata-mum.herokuapp.com/",
+  // APIbaseUrl: "http://localhost:3789",
 
   remainScrapeLinksCount: async function (siteName) {
-    return await fetch(`https://sitedata-mum.herokuapp.com/api/links/remainScrapeLinksCount?site=${siteName}`, {
+    return await fetch(`${lib.APIbaseUrl}/api/links/remainScrapeLinksCount?site=${siteName}`, {
         method: 'GET'
       })
       .then(res => res.json())
@@ -47,7 +47,7 @@ var self = {
     // TODO: need to do 
     // return;
     console.log(`resetScrapeLinks ${siteName}`);
-    return await fetch(`https://sitedata-mum.herokuapp.com/api/links/resetScrapeLinks?site=${siteName}`, {
+    return await fetch(`${lib.APIbaseUrl}/api/links/resetScrapeLinks?site=${siteName}`, {
         method: 'GET'
       })
       .then(res => res.json())
@@ -87,7 +87,7 @@ var self = {
   },
 
   getNewScrapURL: async function (siteName) {
-    return fetch(`https://sitedata-mum.herokuapp.com/api/links/nextScrapLink?site=${siteName}`, {
+    return fetch(`${lib.APIbaseUrl}/api/links/nextScrapLink?site=${siteName}`, {
         method: 'GET'
       })
       .then(res => res.json())
@@ -98,7 +98,7 @@ var self = {
 
   PrepToSave: async function (result, apiUrlTosave) {
 
-    console.log('products_PrepToSave', result.length);
+    console.log('PrepToSave', result.length);
 
     var i, j = [],
       self = this,
@@ -116,8 +116,15 @@ var self = {
         data.map(function (i, item) {
           const hash = crypto.createHash('sha256');
           hash.update(data[item]['url']);
-          data[item]['uid'] = hash.digest('hex');
+          data[item]['id'] = hash.digest('hex');
         })
+
+        /** API endpoint Acsepted data format is 
+         * { dataObject: dataArray }
+         */
+        data = {
+          dataObject: data
+        };
 
         // stringify to save data
         var jsonData = JSON.stringify(data);
@@ -129,7 +136,7 @@ var self = {
   },
 
   saveToDb: async function (saveUrl, jsonData) {
-    console.log('saveToDb');
+    console.log('saveToDb', jsonData);
 
     // send data to save
     return fetch(saveUrl, {
@@ -141,6 +148,9 @@ var self = {
       })
       .then(res => {
         return res.json();
+      })
+      .catch(function (error) {
+        console.error(`Error - ${params} :`, error);
       });
   }
 
