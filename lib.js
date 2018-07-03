@@ -120,7 +120,7 @@ var self = {
         })
 
         /** API endpoint Acsepted data format is 
-         * { dataObject: dataArray }
+         * { dataObje..............................................................................................................................ct: dataArray }
          */
         data = {
           dataObject: data
@@ -131,6 +131,8 @@ var self = {
 
         // save data to db
         self.saveToDb(saveUrl, jsonData);
+      } else {
+        console.error('No Urls to save', saveUrl);
       }
     }
   },

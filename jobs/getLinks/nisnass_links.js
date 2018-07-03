@@ -3,33 +3,31 @@
 const Nightmare = require('nightmare');
 const fetch = require('node-fetch');
 const vo = require('vo');
+const lib = require('../../lib');
 
 console.log(`get main links start`);
 
-var aaa = [
-  "https://www.nisnass.ae/women/brands", 
-  "https://www.nisnass.ae/men/brands", 
+var links = [
+  "https://www.nisnass.ae/women/brands",
+  "https://www.nisnass.ae/men/brands",
   "https://www.nisnass.ae/kids"
 ];
 
-vo(start)(function (err, result) {
-  if (err) throw err;
-});
+start();
 
-function* start() {
-  var i = 0;
-  while (i < aaa.length) {
-    yield getMultipalSoursLinks(aaa[i])
-    i++
+async function start() {
+  for (let link of links) {
+    console.log(link)
+    await getMultipalSoursLinks(link)
   }
 }
 
-function* getMultipalSoursLinks(params) {
-  console.log('get main links', params)
+async function getMultipalSoursLinks(params) {
+  console.log('get main links', params);
   var nightmare = Nightmare();
 
-  yield nightmare
-    .goto(`https://www.nisnass.ae/women/brands`)
+  await nightmare
+    .goto(`${params}`)
     .wait(2000)
     .evaluate(function () {
       var brandPageList = document.querySelectorAll('.Brands-names a');
@@ -46,40 +44,10 @@ function* getMultipalSoursLinks(params) {
       });
       return brandPageLinks;
     })
-    .end()
     .then(function (result) {
-      vo(prepToSave)(result, function (err) {
-        console.log(err)
-        if (err) throw err;
-      });
+      lib.PrepToSave(result, `${lib.APIbaseUrl}/api/links/createOrUpdate`);
     })
     .catch(function (error) {
-      console.error('Error:', error);
-    });
-
-}
-
-function* saveToDb(params) {
-  console.log(params)
-  return yield fetch(`${lib.APIbaseUrl}/api/links`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(params)
-    })
-    .then(res => res.json())
-    .then(json => {
-      console.log(json)
+      console.error(`Error - `, error);
     });
 }
-
-function* prepToSave(catLists) {
-  var i, j, temparray = [],
-    chunk = 100;
-  for (i = 0, j = catLists.length; i < j; i += chunk) {
-    yield saveToDb(catLists.slice(i, i + chunk));
-  }
-}
-
-
