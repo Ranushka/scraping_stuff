@@ -1,48 +1,32 @@
 'use strict';
 
-// const Xvfb = require('xvfb');
 const Nightmare = require('nightmare');
 const fetch = require('node-fetch');
 const vo = require('vo');
-
-// const xvfb = new Xvfb({
-//   silent: true
-// });
-
-// const nightmare = Nightmare({
-//   show: false
-// });
-
-// xvfb.startSync();
+const lib = require('../../lib');
 
 console.log(`get main links start`);
 
-var aaa = [
+var links = [
   "https://ae.awok.com/babies-kids-games/ds-1025/"
 ];
 
-vo(start)(function (err, result) {
-  if (err) throw err;
-});
+start();
 
-function* start() {
-  var i = 0;
-  while (i < aaa.length) {
-    yield getMultipalSoursLinks(aaa[i])
-    i++
+async function start() {
+  for (let link of links) {
+    await getMultipalSoursLinks(link)
   }
-  // xvfb.stopSync();
 }
 
-function* getMultipalSoursLinks(params) {
-  console.log('get main links', params)
+async function getMultipalSoursLinks(urlToScrape) {
+  console.log('get main links', urlToScrape);
   var nightmare = Nightmare();
 
-  yield nightmare
-    .goto(`${params}`)
+  await nightmare
+    .goto(`${urlToScrape}`)
     .wait(2000)
     .evaluate(function () {
-      // get only baby prducts
       var brandPageList = document.querySelectorAll('.sub_cat .disableonclick');
       var brandPageLinks = [];
       brandPageList.forEach(function (item) {
@@ -56,42 +40,10 @@ function* getMultipalSoursLinks(params) {
 
       return brandPageLinks;
     })
-    .end()
     .then(function (result) {
-      vo(prepToSave)(result, function (err) {
-        console.log(err)
-        if (err) throw err;
-      });
+      lib.PrepToSave(result, `${lib.APIbaseUrl}/api/links/createOrUpdate`, urlToScrape);
     })
     .catch(function (error) {
-      console.error('Error:', error);
-    });
-
-}
-
-function* prepToSave(catLists) {
-  var i, j, temparray = [],
-    chunk = 100;
-  for (i = 0, j = catLists.length; i < j; i += chunk) {
-    yield saveToDb(catLists.slice(i, i + chunk));
-  }
-}
-
-function* saveToDb(params) {
-  console.log(params)
-  return yield fetch(`${lib.APIbaseUrl}/api/links`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(params)
-    })
-    .then(res => res.json())
-    .then(json => {
-      console.log(json)
+      console.error(`Error - `, error);
     });
 }
-
-
-
-
