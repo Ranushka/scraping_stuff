@@ -20,7 +20,7 @@ async function start() {
 }
 
 async function getMultipalSoursLinks(urlToScrape) {
-  console.log('get main links', urlToScrape);
+  console.log('now scraping - ', urlToScrape);
   var nightmare = Nightmare();
 
   await nightmare
