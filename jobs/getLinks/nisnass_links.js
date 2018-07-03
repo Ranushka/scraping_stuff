@@ -17,7 +17,6 @@ start();
 
 async function start() {
   for (let link of links) {
-    console.log(link)
     await getMultipalSoursLinks(link)
   }
 }
