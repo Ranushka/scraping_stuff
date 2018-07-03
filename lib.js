@@ -105,36 +105,39 @@ var self = {
       saveUrl = apiUrlTosave,
       chunk = 100;
 
-    // split data to save efactivly
-    for (i = 0, j = result.length; i < j; i += chunk) {
-      let data = result.slice(i, i + chunk)
+      if (result.length) {
+         // split data to save efactivly
+         for (i = 0, j = result.length; i < j; i += chunk) {
+           let data = result.slice(i, i + chunk)
 
-      // save data if data avalable
-      if (data) {
+           // save data if data avalable
+           if (data) {
 
-        // assign unic id for the product
-        data.map(function (i, item) {
-          const hash = crypto.createHash('sha256');
-          hash.update(data[item]['url']);
-          data[item]['id'] = hash.digest('hex');
-        })
+             // assign unic id for the product
+             data.map(function (i, item) {
+               const hash = crypto.createHash('sha256');
+               hash.update(data[item]['url']);
+               data[item]['id'] = hash.digest('hex');
+             })
 
-        /** API endpoint Acsepted data format is 
-         * { dataObje..............................................................................................................................ct: dataArray }
-         */
-        data = {
-          dataObject: data
-        };
+             /** API endpoint Acsepted data format is 
+              * { dataObje..............................................................................................................................ct: dataArray }
+              */
+             data = {
+               dataObject: data
+             };
 
-        // stringify to save data
-        var jsonData = JSON.stringify(data);
+             // stringify to save data
+             var jsonData = JSON.stringify(data);
 
-        // save data to db
-        self.saveToDb(saveUrl, jsonData);
+             // save data to db
+             self.saveToDb(saveUrl, jsonData);
+           }
+         }
       } else {
         console.error('No Urls to save', urlToScrape);
       }
-    }
+   
   },
 
   saveToDb: async function (saveUrl, jsonData) {
