@@ -21,12 +21,12 @@ async function start() {
   }
 }
 
-async function getMultipalSoursLinks(params) {
-  console.log('get main links', params);
+async function getMultipalSoursLinks(urlToScrape) {
+  console.log('get main links', urlToScrape);
   var nightmare = Nightmare();
 
   await nightmare
-    .goto(`${params}`)
+    .goto(`${urlToScrape}`)
     .wait(2000)
     .evaluate(function () {
       var brandPageList = document.querySelectorAll('.Brands-names a');
@@ -44,7 +44,7 @@ async function getMultipalSoursLinks(params) {
       return brandPageLinks;
     })
     .then(function (result) {
-      lib.PrepToSave(result, `${lib.APIbaseUrl}/api/links/createOrUpdate`);
+      lib.PrepToSave(result, `${lib.APIbaseUrl}/api/links/createOrUpdate`, urlToScrape);
     })
     .catch(function (error) {
       console.error(`Error - `, error);
