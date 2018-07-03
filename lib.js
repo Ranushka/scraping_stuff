@@ -96,7 +96,7 @@ var self = {
       });
   },
 
-  PrepToSave: async function (result, apiUrlTosave) {
+  PrepToSave: async function (result, apiUrlTosave, urlToScrape) {
 
     console.log('PrepToSave', result.length);
 
@@ -132,7 +132,7 @@ var self = {
         // save data to db
         self.saveToDb(saveUrl, jsonData);
       } else {
-        console.error('No Urls to save', saveUrl);
+        console.error('No Urls to save', urlToScrape);
       }
     }
   },
