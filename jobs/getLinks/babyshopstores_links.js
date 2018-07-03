@@ -1,49 +1,34 @@
 'use strict';
 
-const Xvfb = require('xvfb');
 const Nightmare = require('nightmare');
 const fetch = require('node-fetch');
 const vo = require('vo');
-
-const xvfb = new Xvfb({
-  silent: true
-});
-
-const nightmare = Nightmare({
-  show: false
-});
-
-xvfb.startSync();
+const lib = require('../../lib');
 
 console.log(`get main links start`);
 
-var aaa = [
-  "https://www.babyshopstores.com/ae/en/department/clothing", 
-  "https://www.babyshopstores.com/ae/en/department/babygear", 
+var links = [
+  "https://www.babyshopstores.com/ae/en/department/clothing",
+  "https://www.babyshopstores.com/ae/en/department/babygear",
   "https://www.babyshopstores.com/ae/en/department/toys",
   "https://www.babyshopstores.com/ae/en/search/?q=%20%3AallCategories%3Adiapers",
   "https://www.babyshopstores.com/ae/en/department/nurseryandfeeding"
 ];
 
-vo(start)(function (err, result) {
-  if (err) throw err;
-});
+start();
 
-function* start() {
-  var i = 0;
-  while (i < aaa.length) {
-    yield getMultipalSoursLinks(aaa[i])
-    i++
+async function start() {
+  for (let link of links) {
+    await getMultipalSoursLinks(link)
   }
-  xvfb.stopSync();
 }
 
-function* getMultipalSoursLinks(params) {
-  console.log('get main links', params)
+async function getMultipalSoursLinks(urlToScrape) {
+  console.log('get main links', urlToScrape);
   var nightmare = Nightmare();
 
-  yield nightmare
-    .goto(`${params}`)
+  await nightmare
+    .goto(`${urlToScrape}`)
     .wait(2000)
     .evaluate(function () {
       var brandPageList = document.querySelectorAll('#filter-form-sub-categories li:not(.visible-xs)>a');
@@ -60,42 +45,64 @@ function* getMultipalSoursLinks(params) {
       });
       return brandPageLinks;
     })
-    .end()
     .then(function (result) {
-      vo(prepToSave)(result, function (err) {
-        console.log(err)
-        if (err) throw err;
-      });
+      lib.PrepToSave(result, `${lib.APIbaseUrl}/api/links/createOrUpdate`, urlToScrape);
     })
     .catch(function (error) {
-      console.error('Error:', error);
+      console.error(`Error - `, error);
     });
-
 }
 
-function* prepToSave(catLists) {
-  var i, j, temparray = [],
-    chunk = 100;
-  for (i = 0, j = catLists.length; i < j; i += chunk) {
-    yield saveToDb(catLists.slice(i, i + chunk));
+
+
+
+
+
+'use strict';
+
+const Nightmare = require('nightmare');
+const fetch = require('node-fetch');
+const vo = require('vo');
+const lib = require('../../lib');
+
+console.log(`get main links start`);
+
+var links = [
+  "https://www.noon.com/en-ae/baby"
+];
+
+start();
+
+async function start() {
+  for (let link of links) {
+    await getMultipalSoursLinks(link)
   }
 }
 
-function* saveToDb(params) {
-  console.log(params)
-  return yield fetch('https://sitedata-mum.herokuapp.com/api/links', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(params)
+async function getMultipalSoursLinks(urlToScrape) {
+  console.log('get main links', urlToScrape);
+  var nightmare = Nightmare();
+
+  await nightmare
+    .goto(`${urlToScrape}`)
+    .wait(2000)
+    .evaluate(function () {
+      var brandPageList = document.querySelectorAll('[class*="sectionContent"]')[0].querySelectorAll('li a');
+      var brandPageLinks = [];
+      brandPageList.forEach(function (item) {
+        brandPageLinks.push({
+          "name": item.innerText.trim(),
+          "url": item.href,
+          "site": "noon",
+          "scrap": false
+        });
+      });
+      return brandPageLinks;
     })
-    .then(res => res.json())
-    .then(json => {
-      console.log(json)
+    .then(function (result) {
+      lib.PrepToSave(result, `${lib.APIbaseUrl}/api/links/createOrUpdate`, urlToScrape);
+    })
+    .catch(function (error) {
+      console.error(`Error - `, error);
     });
 }
-
-
-
-
