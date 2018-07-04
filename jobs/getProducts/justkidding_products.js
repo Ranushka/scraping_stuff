@@ -14,9 +14,9 @@ async function getProductLinks(gotoUrl) {
 
   var haveMore = true;
 
-  //
-  // ─── GO WHILE SCRAPING COMPLEAT THE PAGINATION ON THE LINK A LINK ───────────────
-  //
+  /** 
+   * lopp until pagination false
+   */
   while (haveMore) {
 
     var url = await nightmare.url();
@@ -31,7 +31,7 @@ async function getProductLinks(gotoUrl) {
           pagination = document.getElementsByClassName('i-next') > 0,
           brand = document.getElementsByClassName('block-title')[0].innerText;
 
-        // going through each product
+        /** going through each product */
         productList.forEach(function (item) {
           links.push({
             "name": item.getElementsByClassName('product-name')[0].innerText,
@@ -42,7 +42,7 @@ async function getProductLinks(gotoUrl) {
           });
         });
 
-        /** click to naviagte in paginatin */
+        /** retun links n have more */
         return {
           'links': links,
           'pagination': pagination
