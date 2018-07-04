@@ -12,7 +12,7 @@ var links = [
 start();
 
 async function start() {
-  for ( let link of links ) {
+  for (let link of links) {
     await getMultipalSoursLinks(link)
   }
 }
@@ -43,4 +43,7 @@ async function getMultipalSoursLinks(urlToScrape) {
     .catch(function (error) {
       console.error(`Error - `, error);
     });
+
+  /** nightmare kill */
+  await nightmare.end();
 }

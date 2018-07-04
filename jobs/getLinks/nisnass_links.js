@@ -47,4 +47,7 @@ async function getMultipalSoursLinks(urlToScrape) {
     .catch(function (error) {
       console.error(`Error - `, error);
     });
+
+  /** nightmare kill */
+  await nightmare.end();
 }

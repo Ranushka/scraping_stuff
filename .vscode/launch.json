@@ -9,7 +9,7 @@
             "request": "launch",
             "name": "Launch Program",
             // "program": "${workspaceFolder}/jobs/getProducts/gap_products.js"
-            "program": "${workspaceFolder}/jobs/getLinks/noon_links.js"
+            "program": "${workspaceFolder}/getLinks.js"
             // "program": "${workspaceFolder}/run.js"
         }
     ]
