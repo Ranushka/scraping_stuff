@@ -28,6 +28,7 @@ async function getMultipalSoursLinks(urlToScrape) {
 
       var brandPageList = document.querySelectorAll('.block-grid a');
       var brandPageLinks = [];
+
       brandPageList.forEach(function (item) {
         brandPageLinks.push({
           "name": item.innerText.trim(),
