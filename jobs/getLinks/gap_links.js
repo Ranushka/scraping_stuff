@@ -1,8 +1,6 @@
 'use strict';
 
 const Nightmare = require('nightmare');
-const fetch = require('node-fetch');
-const vo = require('vo');
 const lib = require('../../lib');
 
 console.log(`get main links start`);

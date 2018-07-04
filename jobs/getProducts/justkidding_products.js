@@ -2,7 +2,6 @@
 
 const Nightmare = require('nightmare');
 const nightmare = Nightmare();
-const vo = require('vo');
 const lib = require('../../lib');
 const siteName = "justkidding";
 
