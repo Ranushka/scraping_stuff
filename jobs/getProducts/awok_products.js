@@ -7,9 +7,9 @@ const siteName = "awok";
 
 lib.start(siteName, getProductLinks);
 
-async function getProductLinks(gotoUrl) {
+async function getProductLinks(urlToScrape) {
 
-  await nightmare.goto(gotoUrl);
+  await nightmare.goto(urlToScrape);
 
   var haveMore = true;
 
@@ -54,9 +54,9 @@ async function getProductLinks(gotoUrl) {
           'pagination': pagination
         };
 
-      }).then(function (resalt) {
-        haveMore = resalt.pagination;
-        lib.PrepToSave(resalt.links, `${lib.APIbaseUrl}/api/products`);
+      }).then(function (result) {
+        haveMore = result.pagination;
+        lib.PrepToSave(result.links, `${lib.APIbaseUrl}/api/products/createOrUpdate`, urlToScrape);
       })
 
     //
@@ -70,4 +70,7 @@ async function getProductLinks(gotoUrl) {
         .wait(3000);
     }
   }
+
+  /** nightmare kill */
+  await nightmare.end();
 }

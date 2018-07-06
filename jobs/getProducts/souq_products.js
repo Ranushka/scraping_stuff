@@ -7,14 +7,14 @@ const siteName = "souq";
 
 lib.start(siteName, getProductLinks);
 
-async function getProductLinks(gotoUrl) {
+async function getProductLinks(urlToScrape) {
 
   /** Visiting the first link */
-  await nightmare.goto(gotoUrl);
+  await nightmare.goto(urlToScrape);
 
   var haveMore = true;
   var pageNum = 1;
-  
+
   /** if page has pagination */
   while (haveMore) {
 
@@ -47,16 +47,19 @@ async function getProductLinks(gotoUrl) {
           'pagination': pagination
         };
 
-      }).then(function (resalt) {
-        haveMore = resalt.pagination;
-        lib.PrepToSave(resalt.links, `${lib.APIbaseUrl}/api/products`);
+      }).then(function (result) {
+        haveMore = result.pagination;
+        lib.PrepToSave(result.links, `${lib.APIbaseUrl}/api/products/createOrUpdate`, urlToScrape);
       })
 
     /** Visiting the next page */
     if (haveMore) {
       await nightmare
-      .goto(`${gotoUrl}?section=2&page=${pageNum++}`);
+        .goto(`${urlToScrape}?section=2&page=${pageNum++}`);
     }
 
   }
+
+  /** nightmare kill */
+  await nightmare.end();
 }

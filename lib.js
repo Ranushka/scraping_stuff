@@ -10,8 +10,8 @@ const crypto = require('crypto');
 
 var self = {
   nextExists: true,
-  APIbaseUrl: "https://sitedata-mum.herokuapp.com/",
-  // APIbaseUrl: "http://localhost:3789",
+  // APIbaseUrl: "https://sitedata-mum.herokuapp.com",
+  APIbaseUrl: "http://localhost:3789",
 
   remainScrapeLinksCount: async function (siteName) {
     return await fetch(`${lib.APIbaseUrl}/api/links/remainScrapeLinksCount?site=${siteName}`, {
@@ -47,7 +47,7 @@ var self = {
     // TODO: need to do 
     // return;
     console.log(`resetScrapeLinks ${siteName}`);
-    return await fetch(`${lib.APIbaseUrl}/api/links/resetScrapeLinks?site=${siteName}`, {
+    return await fetch(`${this.APIbaseUrl}/api/links/resetScrapeLinks?site=${siteName}`, {
         method: 'GET'
       })
       .then(res => res.json())
@@ -87,7 +87,7 @@ var self = {
   },
 
   getNewScrapURL: async function (siteName) {
-    return fetch(`${lib.APIbaseUrl}/api/links/nextScrapLink?site=${siteName}`, {
+    return fetch(`${this.APIbaseUrl}/api/links/nextScrapLink?site=${siteName}`, {
         method: 'GET'
       })
       .then(res => res.json())
@@ -121,7 +121,7 @@ var self = {
              })
 
              /** API endpoint Acsepted data format is 
-              * { dataObje..............................................................................................................................ct: dataArray }
+              * { dataObject: dataArray }
               */
              data = {
                dataObject: data
@@ -141,7 +141,9 @@ var self = {
   },
 
   saveToDb: async function (saveUrl, jsonData) {
-    console.log('saveToDb', jsonData);
+    console.log('saveToDb', saveUrl);
+
+
 
     // send data to save
     return fetch(saveUrl, {
@@ -152,7 +154,7 @@ var self = {
         body: jsonData
       })
       .then(res => {
-        return res.json();
+        console.log('Save data Done');
       })
       .catch(function (error) {
         console.error(`Error - ${params} :`, error);

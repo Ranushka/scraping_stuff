@@ -26,8 +26,10 @@ fs.readdir(getProdutsDir, async (err, files) => {
      * get the site name by spliting file name by "_"
      */
     let siteName = file.split('_')[0];
-    await lib.resetScrapeLinks(siteName);
 
+    console.log('lib1');
+    await lib.resetScrapeLinks(siteName);
+console.log('lib2');
     /** Run the command */
     // await lib.startPm2(cmnd);
     await exec(cmnd);

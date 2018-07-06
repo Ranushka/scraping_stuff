@@ -7,9 +7,9 @@ const siteName = "gap";
 
 lib.start(siteName, getProductLinks);
 
-async function getProductLinks(gotoUrl) {
+async function getProductLinks(urlToScrape) {
   let haveMore = true,
-  page = 0;
+    page = 0;
 
   //
   // ─── PREPARING THE SITE FOR SCRAPING ────────────────────────────────────────────
@@ -30,7 +30,7 @@ async function getProductLinks(gotoUrl) {
     // ─── GOT TO SCRAPING URL ─────────────────────────────────────────
     //
     await nightmare
-      .goto(`${gotoUrl}?p=${page++}`);
+      .goto(`${urlToScrape}?p=${page++}`);
 
     //
     // ─── NOW SCRAPING ────────────────────────────────────────────────
@@ -68,9 +68,12 @@ async function getProductLinks(gotoUrl) {
           'pagination': pagination
         };
 
-      }).then(function (resalt) {
-        haveMore = resalt.pagination;
-        lib.PrepToSave(resalt.links, `${lib.APIbaseUrl}/api/products`);
+      }).then(function (result) {
+        haveMore = result.pagination;
+        lib.PrepToSave(result.links, `${lib.APIbaseUrl}/api/products/createOrUpdate`, urlToScrape);
       })
   }
+
+  /** nightmare kill */
+  await nightmare.end();
 }

@@ -7,9 +7,9 @@ const siteName = "nisnass";
 
 lib.start(siteName, getProductLinks);
 
-async function getProductLinks(gotoUrl) {
+async function getProductLinks(urlToScrape) {
 
-  await nightmare.goto(gotoUrl);
+  await nightmare.goto(urlToScrape);
 
   //
   // ─── NOW SCRAPING SITE URL ────────────────────────────────────
@@ -60,7 +60,10 @@ async function getProductLinks(gotoUrl) {
         'links': links
       };
 
-    }).then(function (resalt) {
-      lib.PrepToSave(resalt.links, `${lib.APIbaseUrl}/api/products`);
+    }).then(function (result) {
+      lib.PrepToSave(result.links, `${lib.APIbaseUrl}/api/products/createOrUpdate`, urlToScrape);
     });
+
+  /** nightmare kill */
+  await nightmare.end();
 }

@@ -7,9 +7,9 @@ const siteName = "noon";
 
 lib.start(siteName, getProductLinks);
 
-async function getProductLinks(gotoUrl) {
+async function getProductLinks(urlToScrape) {
 
-  await nightmare.goto(gotoUrl);
+  await nightmare.goto(urlToScrape);
 
   var haveMore = true;
 
@@ -26,16 +26,17 @@ async function getProductLinks(gotoUrl) {
       .evaluate(function () {
 
         var links = [],
-          productList = document.querySelectorAll('[class*="ProductBox__wrapper"] a'),
-          pagination = document.querySelectorAll('[class*="Pagination__nextLink"]')[0].parentElement.offsetWidth > 0;
+          productList = document.querySelectorAll('.productContainer'),
+          pagination = !document.querySelectorAll('.next.disabled').length > 0,
+          brand = document.querySelectorAll('.breadcrumb a:last-child')[0].innerText.trim();
 
         // going through each product
         productList.forEach(function (item) {
           links.push({
-            "name": item.querySelectorAll('[class*="ProductBox__productName"]')[0].innerText,
-            "url": item.href,
-            "price": item.getElementsByClassName('value')[0].innerText.trim(),
-            "brand": item.querySelectorAll('[class*="ProductBox__brandName"]')[0].innerText.trim(),
+            "name": item.querySelectorAll('.name')[0].innerText.trim(),
+            "url": item.querySelectorAll('.product')[0].href,
+            "price": item.querySelectorAll('.sellingPrice')[0].innerText.trim().replace('AED ', ''),
+            "brand": brand,
             "site": "noon",
           });
         });
@@ -46,18 +47,21 @@ async function getProductLinks(gotoUrl) {
           'pagination': pagination
         };
 
-      }).then(function (resalt) {
-        haveMore = resalt.pagination;
-        lib.PrepToSave(resalt.links, `${lib.APIbaseUrl}/api/products`);
+      }).then(function (result) {
+        haveMore = result.pagination;
+        lib.PrepToSave(result.links, `${lib.APIbaseUrl}/api/products/createOrUpdate`, urlToScrape);
       })
 
     if (haveMore) {
       console.log('haveMore');
       await nightmare
         .evaluate(function () {
-          document.querySelectorAll('[class*="Pagination__nextLink"]')[0].click()
+          document.querySelectorAll('li.next a')[0].click();
         })
         .wait(3000);
     }
   }
+
+  /** nightmare kill */
+  await nightmare.end();
 }

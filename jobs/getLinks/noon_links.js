@@ -25,7 +25,7 @@ async function getMultipalSoursLinks(urlToScrape) {
     .goto(`${urlToScrape}`)
     .wait(2000)
     .evaluate(function () {
-      var brandPageList = document.querySelectorAll('[class*="sectionContent"]')[0].querySelectorAll('li a');
+      var brandPageList = document.querySelectorAll('.staticNavContainer .category:first-child > ul > li > a');
       var brandPageLinks = [];
       brandPageList.forEach(function (item) {
         brandPageLinks.push({
