@@ -1,17 +1,16 @@
 'use strict';
 
 const Nightmare = require('nightmare');
-const nightmare = Nightmare();
 const lib = require('../../lib');
 const siteName = "mumzworld";
 
 lib.start(siteName, getProductLinks);
 
 async function getProductLinks(urlToScrape) {
+  let haveMore = true,
+    nightmare = new Nightmare();
 
   await nightmare.goto(urlToScrape);
-
-  var haveMore = true;
 
   //
   // ─── GO WHILE SCRAPING COMPLEAT THE PAGINATION ON THE LINK A LINK ───────────────
@@ -26,7 +25,7 @@ async function getProductLinks(urlToScrape) {
 
     await nightmare
       .wait(3000)
-      .evaluate(function (siteName, result) {
+      .evaluate(function () {
 
         var links = [],
           productList = document.querySelectorAll('.products-grid a.product-image'),
@@ -41,7 +40,7 @@ async function getProductLinks(urlToScrape) {
             "url": item.href,
             "price": item.dataset.pprice,
             "brand": item.dataset.pbrand,
-            "site": siteName,
+            "site": 'mumzworld',
           });
         });
 

@@ -8,10 +8,10 @@ const siteName = "carrefouruae";
 lib.start(siteName, getProductLinks);
 
 async function getProductLinks(urlToScrape) {
-
+  let haveMore = true,
+    nightmare = new Nightmare();
+    
   await nightmare.goto(urlToScrape);
-
-  var haveMore = true;
 
   //
   // ─── GO WHILE SCRAPING COMPLEAT THE PAGINATION ON THE LINK A LINK ───────────────
@@ -25,7 +25,7 @@ async function getProductLinks(urlToScrape) {
     console.log(url);
 
     await nightmare
-      .wait(3000)
+      .wait(4000)
       .evaluate(function () {
 
         var links = [],
@@ -70,7 +70,6 @@ async function getProductLinks(urlToScrape) {
 
       await nightmare
         .goto(nextPageUrl)
-        .wait(3000);
     }
   }
 

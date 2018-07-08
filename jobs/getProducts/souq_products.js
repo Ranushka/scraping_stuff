@@ -8,12 +8,12 @@ const siteName = "souq";
 lib.start(siteName, getProductLinks);
 
 async function getProductLinks(urlToScrape) {
+  let haveMore = true,
+    nightmare = new Nightmare(),
+    pageNum = 1;
 
   /** Visiting the first link */
   await nightmare.goto(urlToScrape);
-
-  var haveMore = true;
-  var pageNum = 1;
 
   /** if page has pagination */
   while (haveMore) {

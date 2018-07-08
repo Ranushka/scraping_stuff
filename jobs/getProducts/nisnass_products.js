@@ -1,13 +1,13 @@
 'use strict';
 
 const Nightmare = require('nightmare');
-const nightmare = Nightmare();
 const lib = require('../../lib');
 const siteName = "nisnass";
 
 lib.start(siteName, getProductLinks);
 
 async function getProductLinks(urlToScrape) {
+  let nightmare = new Nightmare();
 
   await nightmare.goto(urlToScrape);
 

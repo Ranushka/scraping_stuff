@@ -1,7 +1,6 @@
 'use strict';
 
 const Nightmare = require('nightmare');
-const nightmare = Nightmare();
 const lib = require('../../lib');
 const siteName = "gap";
 
@@ -9,6 +8,7 @@ lib.start(siteName, getProductLinks);
 
 async function getProductLinks(urlToScrape) {
   let haveMore = true,
+    nightmare = new Nightmare(),
     page = 0;
 
   //

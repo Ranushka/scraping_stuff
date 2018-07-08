@@ -1,17 +1,16 @@
 'use strict';
 
 const Nightmare = require('nightmare');
-const nightmare = Nightmare();
 const lib = require('../../lib');
 const siteName = "babyshopstores";
 
 lib.start(siteName, getProductLinks);
 
 async function getProductLinks(urlToScrape) {
+  let haveMore = true,
+    nightmare = new Nightmare();
 
   await nightmare.goto(urlToScrape);
-
-  var haveMore = true;
 
   //
   // ─── GO WHILE SCRAPING COMPLEAT THE PAGINATION ON THE LINK A LINK ───────────────
@@ -73,7 +72,6 @@ async function getProductLinks(urlToScrape) {
     if (haveMore) {
       await nightmare
         .click('.next')
-        .wait(2000)
     }
   }
   

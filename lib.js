@@ -10,8 +10,8 @@ const crypto = require('crypto');
 
 var self = {
   nextExists: true,
-  // APIbaseUrl: "https://sitedata-mum.herokuapp.com",
-  APIbaseUrl: "http://localhost:3789",
+  APIbaseUrl: "https://sitedata-mum.herokuapp.com",
+  // APIbaseUrl: "http://localhost:3789",
 
   remainScrapeLinksCount: async function (siteName) {
     return await fetch(`${lib.APIbaseUrl}/api/links/remainScrapeLinksCount?site=${siteName}`, {
@@ -44,14 +44,12 @@ var self = {
   },
 
   resetScrapeLinks: async function (siteName) {
-    // TODO: need to do 
-    // return;
-    console.log(`resetScrapeLinks ${siteName}`);
     return await fetch(`${this.APIbaseUrl}/api/links/resetScrapeLinks?site=${siteName}`, {
         method: 'GET'
       })
       .then(res => res.json())
       .then(json => {
+        console.log(`resetedScrapeLinks - ${siteName} - ${json.greeting.ok}`);
         return json;
       });
   },
@@ -60,29 +58,24 @@ var self = {
     console.log('kicking off');
 
     let i = 0;
-    let nextMainLink = true;
 
-    self.nextExists = true;
-
-    while (nextMainLink) {
-      let link, urlToScrap;
-      urlToScrap = await self.getNewScrapURL(siteName);
+    while (self.nextExists) {
+      let urlToScrap = await self.getNewScrapURL(siteName);
 
       if (urlToScrap.greeting) {
-        console.log('nextMainLink --- ', nextMainLink)
-        self.nextExists = true;
+        console.log('self.nextExists --- ', self.nextExists);
         await getProduct(urlToScrap.greeting.url, siteName);
       } else {
-        nextMainLink = false;
+        self.nextExists = false;
       }
       i++;
     }
 
     console.log(`${siteName} All links ara scraped ${i}`);
 
-    nightmare.end();
-    pm2.killDaemon();
-    process.exit(2);
+    // nightmare.end();
+    // pm2.killDaemon();
+    // process.exit(2);
 
   },
 
@@ -93,12 +86,15 @@ var self = {
       .then(res => res.json())
       .then(json => {
         return json;
-      });
+      })
+      .catch(error => {
+        nightmare.end();
+      })
   },
 
   PrepToSave: async function (result, apiUrlTosave, urlToScrape) {
 
-    console.log('PrepToSave', result.length);
+    console.log('PrepToSave', result.length, 'items');
 
     var i, j = [],
       self = this,
@@ -141,24 +137,23 @@ var self = {
   },
 
   saveToDb: async function (saveUrl, jsonData) {
-    console.log('saveToDb', saveUrl);
+    // console.log('saveToDb', saveUrl);
 
-
+    await console.log('Save data Start');
 
     // send data to save
-    return fetch(saveUrl, {
+    await fetch(saveUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: jsonData
       })
-      .then(res => {
-        console.log('Save data Done');
-      })
       .catch(function (error) {
-        console.error(`Error - ${params} :`, error);
+        console.error(`Error - ${saveUrl} :`, error);
       });
+
+      await console.log('Save data Done');
   }
 
 };
