@@ -11,33 +11,42 @@ async function getProductLinks(urlToScrape) {
     nightmare = new Nightmare(),
     page = 0;
 
-  //
-  // ─── PREPARING THE SITE FOR SCRAPING ────────────────────────────────────────────
-  //
+  console.log('start scraping init', urlToScrape);
+
+  /** 
+   * visiting init page url 
+   * set cookie */
   await nightmare
     .goto(`https://www.gap.ae/`)
     .wait(4000)
     .evaluate(function () {
       document.cookie = "prod___delivery_type_changed=true";
-    });
+    })
+    .catch(error => {
+      haveMore = false;
+      console.error('Error start scraping init', urlToScrape, error);
+    })
 
-  //
-  // ─── GO WHILE SCRAPING COMPLEAT THE PAGINATION ON THE LINK A LINK ───────────────
-  //
+  /** 
+   * lopp until pagination false */
   while (haveMore) {
 
-    //
-    // ─── GOT TO SCRAPING URL ─────────────────────────────────────────
-    //
+    /** 
+     * visiting paginated url */
     await nightmare
-      .goto(`${urlToScrape}?p=${page++}`);
+      .goto(`${urlToScrape}?p=${page++}`)
+      .catch(error => {
+        haveMore = false;
+        console.error('Error start scraping init', urlToScrape, error);
+      })
 
-    //
-    // ─── NOW SCRAPING ────────────────────────────────────────────────
-    //
+    /** 
+     * now scraping url */
     var url = await nightmare.url();
-    console.log(url);
+    console.log('inside while loop - ', url);
 
+    /** 
+     * Start collecting product Data */
     await nightmare
       .wait(4000)
       .evaluate(function () {
@@ -46,9 +55,8 @@ async function getProductLinks(urlToScrape) {
           productList = document.querySelectorAll('.product-item'),
           pagination = document.querySelectorAll('.load-more').length > 0;
 
-        //
-        // GOING THROUGH EACH PRODUCT
-        //
+        /** 
+         * going through each product */
         productList.forEach(function (item) {
           var data = JSON.parse(URI.decode(item.getAttribute('data-gtm-product')));
           links.push({
@@ -60,20 +68,26 @@ async function getProductLinks(urlToScrape) {
           });
         });
 
-        //
-        // RETURN ALL THE VALUES
-        //
+        /** 
+         * return all the values */
         return {
           'links': links,
           'pagination': pagination
         };
 
-      }).then(function (result) {
+      })
+      .then(function (result) {
         haveMore = result.pagination;
         lib.PrepToSave(result.links, `${lib.APIbaseUrl}/api/products/createOrUpdate`, urlToScrape);
       })
+      .catch(error => {
+        haveMore = false;
+        console.error('scrape get data - ', error)
+      })
   }
 
-  /** nightmare kill */
+  /** 
+   * nightmare kill */
+  console.log('kill nightmare - ', urlToScrape);
   await nightmare.end();
 }

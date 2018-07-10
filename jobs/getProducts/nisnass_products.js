@@ -7,63 +7,78 @@ const siteName = "nisnass";
 lib.start(siteName, getProductLinks);
 
 async function getProductLinks(urlToScrape) {
-  let nightmare = new Nightmare();
+  let haveMore = true,
+    nightmare = new Nightmare();
 
-  await nightmare.goto(urlToScrape);
+  console.log('start scraping init', urlToScrape);
 
-  //
-  // ─── NOW SCRAPING SITE URL ────────────────────────────────────
-  //
-  var url = await nightmare.url();
-  console.log(url);
+  if (haveMore) {
+    /** 
+     * visiting init page url */
+    await nightmare
+      .goto(urlToScrape)
+      .wait(4000)
+      .catch(error => {
+        console.error('Error start scraping init', urlToScrape, error);
+        haveMore = false;
+        return;
+      })
 
-  //
-  // ─── SCROOL INFINITE SCROLL TO END ──────────────────────────────────────────────
-  //
-  var previousHeight, currentHeight = 0;
-  while (previousHeight !== currentHeight) {
-    previousHeight = currentHeight;
-    var currentHeight = await nightmare.evaluate(function () {
-      return document.body.scrollHeight;
-    });
-    await nightmare.scrollTo(currentHeight, 0)
-      .wait(2000);
-  }
+    /** 
+     * now scraping url */
+    var url = await nightmare.url();
+    console.log(url);
 
-  //
-  // ─── START SCRAPING ─────────────────────────────────────────────────────────────
-  //
-  await nightmare
-    .wait(3000)
-    .evaluate(function () {
+    /** 
+     * Scroll till page end */
+    var previousHeight, currentHeight = 0;
+    while (previousHeight !== currentHeight) {
+      previousHeight = currentHeight;
+      var currentHeight = await nightmare.evaluate(function () {
+        return document.body.scrollHeight;
+      })
+        .scrollTo(currentHeight, 0)
+        .wait(2000);
+    }
 
-      var links = [],
-        productList = document.querySelectorAll('.PLP-productList .Product');
+    /** 
+     * Start collecting product Data */
+    await nightmare
+      .wait(3000)
+      .evaluate(function () {
 
-      //
-      // GOING THROUGH EACH PRODUCT
-      //
-      productList.forEach(function (item) {
-        links.push({
-          "name": item.getElementsByClassName("Product-name")[0].innerText.trim(),
-          "url": item.getElementsByClassName("Product-details")[0].href,
-          "price": item.getElementsByClassName("Product-minPrice")[0].innerText.replace(' AED', ''),
-          "brand": item.getElementsByClassName("Product-brand")[0].innerText.trim(),
-          "site": "nisnass",
+        var links = [],
+          productList = document.querySelectorAll('.PLP-productList .Product');
+
+        /** 
+         * going through each product */
+        productList.forEach(function (item) {
+          links.push({
+            "name": item.getElementsByClassName("Product-name")[0].innerText.trim(),
+            "url": item.getElementsByClassName("Product-details")[0].href,
+            "price": item.getElementsByClassName("Product-minPrice")[0].innerText.replace(' AED', ''),
+            "brand": item.getElementsByClassName("Product-brand")[0].innerText.trim(),
+            "site": "nisnass",
+          });
         });
-      });
 
-      //
-      // RETURN ALL THE VALUES
-      //
-      return {
-        'links': links
-      };
+        /** 
+         * return all the values */
+        return {
+          'links': links
+        };
 
-    }).then(function (result) {
-      lib.PrepToSave(result.links, `${lib.APIbaseUrl}/api/products/createOrUpdate`, urlToScrape);
-    });
+      })
+      .then(function (result) {
+        lib.PrepToSave(result.links, `${lib.APIbaseUrl}/api/products/createOrUpdate`, urlToScrape);
+      })
+      .catch(error => {
+        console.error('scrape get data - ', error)
+      })
 
-  /** nightmare kill */
-  await nightmare.end();
+    /** 
+     * nightmare kill */
+    console.log('kill nightmare - ', urlToScrape);
+    await nightmare.end();
+  }
 }

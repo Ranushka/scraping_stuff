@@ -80,6 +80,7 @@ var self = {
   },
 
   getNewScrapURL: async function (siteName) {
+    console.log('getNewScrapURL for - ', siteName);
     return fetch(`${this.APIbaseUrl}/api/links/nextScrapLink?site=${siteName}`, {
         method: 'GET'
       })
@@ -88,7 +89,7 @@ var self = {
         return json;
       })
       .catch(error => {
-        nightmare.end();
+        console.log('getNewScrapURL error - ', error)
       })
   },
 
@@ -127,7 +128,7 @@ var self = {
              var jsonData = JSON.stringify(data);
 
              // save data to db
-             self.saveToDb(saveUrl, jsonData);
+             await self.saveToDb(saveUrl, jsonData);
            }
          }
       } else {
@@ -137,12 +138,10 @@ var self = {
   },
 
   saveToDb: async function (saveUrl, jsonData) {
-    // console.log('saveToDb', saveUrl);
-
-    await console.log('Save data Start');
+    console.log('Save data Start');
 
     // send data to save
-    await fetch(saveUrl, {
+/*     await fetch(saveUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -153,7 +152,21 @@ var self = {
         console.error(`Error - ${saveUrl} :`, error);
       });
 
-      await console.log('Save data Done');
+    await console.log('Save data Done');
+ */
+
+    let config = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: jsonData
+    };
+
+    const res = await fetch(saveUrl, config);
+    const json = await res.json();
+    console.log('Save data Done', json.arg.ok);
+
   }
 
 };

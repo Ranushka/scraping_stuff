@@ -10,7 +10,17 @@ async function getProductLinks(urlToScrape) {
   let haveMore = true,
     nightmare = new Nightmare();
 
-  await nightmare.goto(urlToScrape);
+  console.log('start scraping init', urlToScrape);
+
+  /** 
+   * visiting init page url */
+  await nightmare
+    .goto(urlToScrape)
+    .wait(4000)
+    .catch(error => {
+      haveMore = false;
+      console.error('Error start scraping init', urlToScrape, error);
+    })
 
   /** 
    * lopp until pagination false
@@ -18,10 +28,10 @@ async function getProductLinks(urlToScrape) {
   while (haveMore) {
 
     var url = await nightmare.url();
-    console.log(url);
+    console.log('inside while loop - ', url);
 
     await nightmare
-      .wait(4000)
+      .wait(5000)
       .evaluate(function () {
 
         var links = [],
@@ -29,7 +39,8 @@ async function getProductLinks(urlToScrape) {
           pagination = document.getElementsByClassName('i-next') > 0,
           brand = document.getElementsByClassName('block-title')[0].innerText;
 
-        /** going through each product */
+        /** 
+         * going through each product */
         productList.forEach(function (item) {
           links.push({
             "name": item.getElementsByClassName('product-name')[0].innerText,
@@ -40,27 +51,38 @@ async function getProductLinks(urlToScrape) {
           });
         });
 
-        /** retun links n have more */
+        /** 
+         * return all the values */
         return {
           'links': links,
           'pagination': pagination
         };
 
-      }).then(function (result) {
+      })
+      .then(function (result) {
         haveMore = result.pagination;
         lib.PrepToSave(result.links, `${lib.APIbaseUrl}/api/products/createOrUpdate`, urlToScrape);
       })
+      .catch(error => {
+        console.error('scrape get data - ', error)
+      })
 
+    /** 
+     * Paginating if avalable */
     if (haveMore) {
       console.log('haveMore');
-      /** click to naviagte in paginatin */
       await nightmare
         .evaluate(function () {
           document.getElementsByClassName('i-next')[0].click()
         })
+        .catch(() => {
+          haveMore = false;
+        })
     }
   }
-  
-  /** nightmare kill */
+
+  /** 
+   * nightmare kill */
+  console.log('kill nightmare - ', urlToScrape);
   await nightmare.end();
 }

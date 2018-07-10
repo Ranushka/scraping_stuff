@@ -1,7 +1,6 @@
 'use strict';
 
 const Nightmare = require('nightmare');
-const nightmare = Nightmare();
 const lib = require('../../lib');
 const siteName = "carrefouruae";
 
@@ -10,22 +9,32 @@ lib.start(siteName, getProductLinks);
 async function getProductLinks(urlToScrape) {
   let haveMore = true,
     nightmare = new Nightmare();
-    
-  await nightmare.goto(urlToScrape);
 
-  //
-  // ─── GO WHILE SCRAPING COMPLEAT THE PAGINATION ON THE LINK A LINK ───────────────
-  //
+  console.log('start scraping init', urlToScrape);
+
+  /** 
+   * visiting init page url */
+  await nightmare
+    .goto(urlToScrape)
+    .wait(4000)
+    .catch(error => {
+      haveMore = false;
+      console.error('Error start scraping init', urlToScrape, error);
+    })
+
+  /** 
+   * lopp until pagination false */
   while (haveMore) {
 
-    //
-    // ─── LOGING SCRAPING SITE URL ────────────────────────────────────
-    //
+    /** 
+     * now scraping url */
     var url = await nightmare.url();
-    console.log(url);
+    console.log('inside while loop - ', url);
 
+    /** 
+     * Start collecting product Data */
     await nightmare
-      .wait(4000)
+      .wait(5000)
       .evaluate(function () {
 
         var links = [],
@@ -33,9 +42,8 @@ async function getProductLinks(urlToScrape) {
           pagination = document.querySelectorAll('.plp-pagination__nav:last-child')[0].classList.length == 1,
           tags = document.querySelectorAll('.comp-breadcrumb__item:last-child')[0].innerText.trim();
 
-        //
-        // GOING THROUGH EACH PRODUCT
-        //
+        /** 
+         * going through each product */
         productList.forEach(function (item) {
           links.push({
             "name": item.querySelectorAll('.comp-productcard__img')[0].title.trim(),
@@ -46,33 +54,39 @@ async function getProductLinks(urlToScrape) {
           });
         });
 
-        //
-        // RETURN ALL THE VALUES
-        //
+        /** 
+         * return all the values */
         return {
           'links': links,
           'pagination': pagination
         };
 
-      }).then(function (result) {
+      })
+      .then(function (result) {
         haveMore = result.pagination;
         lib.PrepToSave(result.links, `${lib.APIbaseUrl}/api/products/createOrUpdate`, urlToScrape);
       })
+      .catch(error => {
+        haveMore = false;
+        console.error('scrape get data - ', error)
+      })
 
-    //
-    // ─── CHECK HAVE MORE TO THE PAGE ─────────────────────────────────
-    //  
+    /** 
+     * Paginating if avalable */
     if (haveMore) {
       var nextPageUrl = await nightmare
         .evaluate(function () {
           return document.querySelectorAll('.plp-pagination__nav:last-child a')[0].href
         })
-
-      await nightmare
         .goto(nextPageUrl)
+        .catch(() => {
+          haveMore = false;
+        })
     }
   }
 
-  /** nightmare kill */
+  /** 
+   * nightmare kill */
+  console.log('kill nightmare - ', urlToScrape);
   await nightmare.end();
 }

@@ -10,11 +10,20 @@ async function getProductLinks(urlToScrape) {
   let haveMore = true,
     nightmare = new Nightmare();
 
-  await nightmare.goto(urlToScrape);
+  console.log('start scraping init', urlToScrape);
 
-  //
-  // ─── GO WHILE SCRAPING COMPLEAT THE PAGINATION ON THE LINK A LINK ───────────────
-  //
+  /** 
+   * visiting init page url */
+  await nightmare
+    .goto(urlToScrape)
+    .wait(4000)
+    .catch(error => {
+      haveMore = false;
+      console.error('Error start scraping init', urlToScrape, error);
+    })
+
+  /** 
+   * lopp until pagination false */
   while (haveMore) {
 
     //
@@ -24,7 +33,7 @@ async function getProductLinks(urlToScrape) {
     console.log(url);
 
     await nightmare
-      .wait(4000)
+      .wait(5000)
       .evaluate(function () {
 
         var links = [],
@@ -33,16 +42,14 @@ async function getProductLinks(urlToScrape) {
           tagsElemnts = document.querySelectorAll('.breadcrumb > li > a'),
           tags = [];
 
-        //
-        // GET TAGS FOR THE PRODUCT
-        //
+        /** 
+         * Start collecting product Data */
         tagsElemnts.forEach(function (a) {
           tags.push(a.innerText)
         });
 
-        //
-        // GOING THROUGH EACH PRODUCT
-        //
+        /** 
+         * going through each product */
         productList.forEach(function (item) {
           links.push({
             "name": item.querySelectorAll('[itemprop="name"]')[0].innerText.trim(),
@@ -53,28 +60,36 @@ async function getProductLinks(urlToScrape) {
           });
         });
 
-        //
-        // RETURN ALL THE VALUES
-        //
+        /** 
+         * return all the values */
         return {
           'links': links,
           'pagination': pagination
         };
 
-      }).then(function (result) {
+      })
+      .then(function (result) {
         haveMore = result.pagination;
         lib.PrepToSave(result.links, `${lib.APIbaseUrl}/api/products/createOrUpdate`, urlToScrape);
       })
+      .catch(error => {
+        haveMore = false;
+        console.error('scrape get data - ', error)
+      })
 
-    //
-    // ─── CHECK HAVE MORE TO THE PAGE ─────────────────────────────────
-    //  
+    /** 
+     * Paginating if avalable */
     if (haveMore) {
       await nightmare
         .click('.next')
+        .catch(() => {
+          haveMore = false;
+        })
     }
   }
-  
-  /** nightmare kill */
+
+  /** 
+   * nightmare kill */
+  console.log('kill nightmare - ', urlToScrape);
   await nightmare.end();
 }

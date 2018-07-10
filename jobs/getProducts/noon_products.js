@@ -10,18 +10,31 @@ async function getProductLinks(urlToScrape) {
   let haveMore = true,
     nightmare = new Nightmare();
 
-  await nightmare.goto(urlToScrape);
+  console.log('start scraping init', urlToScrape);
 
-  //
-  // ─── GO WHILE SCRAPING COMPLEAT THE PAGINATION ON THE LINK A LINK ───────────────
-  //
+  /** 
+   * visiting init page url */
+  await nightmare
+    .goto(urlToScrape)
+    .wait(4000)
+    .catch(error => {
+      haveMore = false;
+      console.error('Error start scraping init', urlToScrape, error);
+    })
+
+  /** 
+   * lopp until pagination false */
   while (haveMore) {
 
+    /** 
+     * now scraping url */
     var url = await nightmare.url();
-    console.log(url);
+    console.log('inside while loop - ', url);
 
+    /** 
+     * Start collecting product Data */
     await nightmare
-      .wait(4000)
+      .wait(5000)
       .evaluate(function () {
 
         var links = [],
@@ -29,7 +42,8 @@ async function getProductLinks(urlToScrape) {
           pagination = !document.querySelectorAll('.next.disabled').length > 0,
           brand = document.querySelectorAll('.breadcrumb a:last-child')[0].innerText.trim();
 
-        // going through each product
+        /** 
+         * going through each product */
         productList.forEach(function (item) {
           links.push({
             "name": item.querySelectorAll('.name')[0].innerText.trim(),
@@ -40,27 +54,39 @@ async function getProductLinks(urlToScrape) {
           });
         });
 
-        // return all the values
+        /** 
+         * return all the values */
         return {
           'links': links,
           'pagination': pagination
         };
 
-      }).then(function (result) {
+      })
+      .then(function (result) {
         haveMore = result.pagination;
         lib.PrepToSave(result.links, `${lib.APIbaseUrl}/api/products/createOrUpdate`, urlToScrape);
       })
+      .catch(error => {
+        haveMore = false;
+        console.error('scrape get data - ', error)
+      })
 
+    /** 
+     * Paginating if avalable */
     if (haveMore) {
       console.log('haveMore');
       await nightmare
         .evaluate(function () {
           document.querySelectorAll('li.next a')[0].click();
         })
-        .wait(3000);
+        .catch(() => {
+          haveMore = false;
+        })
     }
   }
 
-  /** nightmare kill */
+  /** 
+   * nightmare kill */
+  console.log('kill nightmare - ', urlToScrape);
   await nightmare.end();
 }
