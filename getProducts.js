@@ -16,7 +16,7 @@ const lib = require('./lib');
  */
 fs.readdir(getProdutsDir, async (err, files) => {
 
-  console.time('sceapeAllStart');
+  console.time('sceapeAllTime');
 
   for (let file of files) {
 
@@ -28,7 +28,7 @@ fs.readdir(getProdutsDir, async (err, files) => {
 
   }
 
-  console.timeEnd('sceapeAllEnd');
+  console.timeEnd('sceapeAllTime');
 
 })
 
@@ -39,14 +39,14 @@ async function runComand(getProdutsDir, file) {
 
   let siteName = file.split('_')[0];
 
-  console.log('siteName - ', siteName)
   await lib.resetScrapeLinks(siteName);
 
-  // await exec(cmnd);
-
-  let task1 = async () => exec(cmnd);
-  let task2 = async () => exec(cmnd);
-  let task3 = async () => exec(cmnd);
+  /** run multipal tasks
+   * exec( cmnd, {maxBuffer: 1024 * 500} );
+   */
+  let task1 = async () => exec(cmnd, {maxBuffer: 1024 * 1000});
+  let task2 = async () => exec(cmnd, {maxBuffer: 1024 * 1000});
+  let task3 = async () => exec(cmnd, {maxBuffer: 1024 * 1000});
 
   await Promise.all([
     task1(), task2(), task3()
@@ -64,31 +64,3 @@ process.on('unhandledRejection', error => {
 
 
 
-
-
-// /** Get products all sites
-//  * loop through the files
-//  * located at ./lib/
-//  */
-// fs.readdir(getProdutsDir, async (err, files) => {
-
-//   for (let file of files) {
-//     console.log(file)
-//     let cmnd = `pm2 start ${getProdutsDir+file} --no-autorestart -i 3`;
-//     // let cmnd = `${getProdutsDir+file}`;
-//     console.log(cmnd);
-
-//     /** Reset the links befor start
-//      * get the site name by spliting file name by "_"
-//      */
-//     let siteName = file.split('_')[0];
-
-//     await lib.resetScrapeLinks(siteName);
-
-//     /** Run the command */
-//     // await lib.startPm2(cmnd);
-//     await exec(cmnd);
-
-//   }
-
-// })
