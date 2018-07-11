@@ -10,6 +10,7 @@ const crypto = require('crypto');
 
 var self = {
   nextExists: true,
+  waitTime: 4000,
   APIbaseUrl: "https://sitedata-mum.herokuapp.com",
   // APIbaseUrl: "http://localhost:3789",
 
@@ -138,10 +139,10 @@ var self = {
   },
 
   saveToDb: async function (saveUrl, jsonData) {
-    console.log('Save data Start');
+    await console.log('Save data Start');
 
     // send data to save
-/*     await fetch(saveUrl, {
+    await fetch(saveUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -153,20 +154,10 @@ var self = {
       });
 
     await console.log('Save data Done');
- */
 
-    let config = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: jsonData
-    };
 
-    const res = await fetch(saveUrl, config);
-    const json = await res.json();
-    console.log('Save data Done', json.arg.ok);
 
+    
   }
 
 };

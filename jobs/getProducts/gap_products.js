@@ -18,7 +18,7 @@ async function getProductLinks(urlToScrape) {
    * set cookie */
   await nightmare
     .goto(`https://www.gap.ae/`)
-    .wait(4000)
+    .wait(lib.waitTime)
     .evaluate(function () {
       document.cookie = "prod___delivery_type_changed=true";
     })
@@ -48,7 +48,7 @@ async function getProductLinks(urlToScrape) {
     /** 
      * Start collecting product Data */
     await nightmare
-      .wait(4000)
+      .wait(lib.waitTime)
       .evaluate(function () {
 
         var links = [],

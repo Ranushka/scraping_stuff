@@ -17,7 +17,7 @@ async function getProductLinks(urlToScrape) {
      * visiting init page url */
     await nightmare
       .goto(urlToScrape)
-      .wait(4000)
+      .wait(lib.waitTime)
       .catch(error => {
         console.error('Error start scraping init', urlToScrape, error);
         haveMore = false;
