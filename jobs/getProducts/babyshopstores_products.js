@@ -38,7 +38,7 @@ async function getProductLinks(urlToScrape) {
 
         var links = [],
           productList = document.querySelectorAll('.product-item'),
-          pagination = document.querySelectorAll('[class="next"]').length ? true : false,
+          pagination = Boolean(document.querySelectorAll('[class="next"]').length),
           tagsElemnts = document.querySelectorAll('.breadcrumb > li > a'),
           tags = [];
 
