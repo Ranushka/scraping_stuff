@@ -4,9 +4,6 @@
 const getProdutsDir = `${__dirname}/jobs/getProducts/`;
 const fs = require('fs');
 
-const util = require('util');
-const exec = util.promisify(require('child_process').exec);
-
 const { spawn } = require('child_process');
 
 const lib = require('./lib');
@@ -36,20 +33,10 @@ fs.readdir(getProdutsDir, async (err, files) => {
 
 
 async function runComand(getProdutsDir, file) {
-  let cmnd = `node ${getProdutsDir+file}`;
-  // let cmnd = `pm2 start ${getProdutsDir+file} --no-autorestart -i 3`;
 
   let siteName = file.split('_')[0];
 
   await lib.resetScrapeLinks(siteName);
-
-  /** run multipal tasks
-   * exec( cmnd, {maxBuffer: 1024 * 500} );
-   */
-  let task1 = async () => exec(cmnd, {maxBuffer: 1024 * 1000});
-  let task2 = async () => exec(cmnd, {maxBuffer: 1024 * 1000});
-  let task3 = async () => exec(cmnd, {maxBuffer: 1024 * 1000});
-
 
   const T1 = spawn('node', [getProdutsDir + file]).stdout.on('data', (data) => {
     console.log(data.toString());
@@ -63,10 +50,6 @@ async function runComand(getProdutsDir, file) {
   const T3 = spawn('node', [getProdutsDir + file]).stdout.on('data', (data) => {
     console.log(data.toString());
   });
-
-  // await Promise.all([
-  //   task1(), task2(), task3()
-  // ]);
 
   await Promise.all([
     T1(), T2(), T3()
