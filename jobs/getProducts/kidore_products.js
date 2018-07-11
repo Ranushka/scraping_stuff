@@ -81,7 +81,7 @@ async function getProductLinks(urlToScrape) {
      * Paginating if avalable */
     if (haveMore) {
       await nightmare
-        .click('.next')
+        .click('.i-next')
         .catch(() => {
           haveMore = false;
         })
