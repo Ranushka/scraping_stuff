@@ -69,8 +69,8 @@ async function getProductLinks(urlToScrape) {
         };
 
       })
-      .then(function (result) {
-        lib.PrepToSave(result.links, `${lib.APIbaseUrl}/api/products/createOrUpdate`, urlToScrape);
+      .then(async result => {
+        await await lib.PrepToSave(result.links, `${lib.APIbaseUrl}/api/products/createOrUpdate`, urlToScrape);
       })
       .catch(error => {
         console.error('scrape get data - ', error)

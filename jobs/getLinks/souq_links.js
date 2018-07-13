@@ -40,8 +40,8 @@ async function getMultipalSoursLinks(urlToScrape) {
 
       return brandPageLinks;
     })
-    .then(function (result) {
-      lib.PrepToSave(result, `${lib.APIbaseUrl}/api/links/createOrUpdate`, urlToScrape);
+    .then(async result => {
+      await lib.PrepToSave(result, `${lib.APIbaseUrl}/api/links/createOrUpdate`, urlToScrape);
     })
     .catch(function (error) {
       console.error(`Error - `, error);

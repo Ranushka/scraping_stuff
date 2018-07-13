@@ -4,7 +4,9 @@
 const getProdutsDir = `${__dirname}/jobs/getProducts/`;
 const fs = require('fs');
 
-const { spawn } = require('child_process');
+const {
+  spawn
+} = require('child_process');
 
 const lib = require('./lib');
 
@@ -36,7 +38,7 @@ async function runComand(getProdutsDir, file) {
 
   let siteName = file.split('_')[0];
 
-  await lib.resetScrapeLinks(siteName);
+  // await lib.resetScrapeLinks(siteName);
 
   const T1 = spawn('node', [getProdutsDir + file]).stdout.on('data', (data) => {
     console.log(data.toString());
@@ -51,8 +53,12 @@ async function runComand(getProdutsDir, file) {
     console.log(data.toString());
   });
 
+  const T4 = spawn('node', [getProdutsDir + file]).stdout.on('data', (data) => {
+    console.log(data.toString());
+  });
+
   await Promise.all([
-    T1(), T2(), T3()
+    T1, T2, T3, T4
   ]);
 
 }
@@ -62,8 +68,3 @@ process.on('unhandledRejection', error => {
   // Will print "unhandledRejection err is not defined"
   console.log('unhandledRejection ----- ', error.message);
 });
-
-
-
-
-
