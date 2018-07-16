@@ -24,7 +24,7 @@ async function getProductLinks(urlToScrape) {
     })
     .catch(error => {
       haveMore = false;
-      console.error('Error start scraping init', urlToScrape, error);
+      console.error('Error start scraping init', urlToScrape, error, '--------------------------------');
     })
 
   /** 
@@ -37,7 +37,7 @@ async function getProductLinks(urlToScrape) {
       .goto(`${urlToScrape}?p=${page++}`)
       .catch(error => {
         haveMore = false;
-        console.error('Error start scraping init', urlToScrape, error);
+        console.error('Error start scraping init', urlToScrape, error, '--------------------------------');
       })
 
     /** 

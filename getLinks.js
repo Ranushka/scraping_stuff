@@ -1,28 +1,68 @@
 'use strict';
 
-const getProdutsDir = `${__dirname}/jobs/getLinks/`;
-const fs = require('fs');
-const {
-  spawn
-} = require('child_process');
-
-/** 
- * Get links from all sites
+/** Get products all sites
  * loop through the files
- * located at. /lib/jobs/getLinks/
+ * located at ./lib/
  */
-fs.readdir(getProdutsDir, async (err, files) => {
-  console.time('Time_for_links');
-  for (let file of files) {
+const getLinksDir = `${__dirname}/jobs/getLinks/`;
+const fs = require('fs');
+const { spawn } = require('child_process');
 
-    await runComand(getProdutsDir, file);
-    await console.log(file)
-  }
-  console.timeEnd('Time_for_links');
-});
+ runEach();
 
-async function runComand(getProdutsDir, file) {
-  spawn('node', [getProdutsDir + file]).stdout.on('data', (data) => {
-    console.log(data.toString());
+ async function runEach() {
+
+   fs.readdir(getLinksDir, async (err, files) => {
+     console.time('sceapeAllTime');
+     for (let file of files) {
+       console.log(`start script ${file}`)
+       await runProductsComand(`${getLinksDir + file}`)
+       console.log(`end script ${file}`)
+     }
+     console.timeEnd('sceapeAllTime');
+   });
+
+   console.log('ALL Scripts are done');
+
+ }
+
+ async function runProductsComand(url) {
+
+   var abc = await Promise.all([
+     promisfiedSpawn(url)
+   ])
+
+   return abc;
+
+ }
+
+function promisfiedSpawn(url) {
+
+  return new Promise((resolve, reject) => {
+
+    console.log(`start ---- ${url}`)
+
+    let comand = spawn('node', [url])
+
+    comand.stdout.on('data', function (data) {
+      console.log('stdout: ' + data.toString());
+    })
+
+    comand.stderr.on('data', function (data) {
+      console.log('stderr: ' + data.toString());
+    })
+
+    comand.on('exit', function (data) {
+      console.log('child process exited with code ' + data.toString());
+      resolve(data.toString());
+    })
+
   });
-}
+
+};
+
+
+ process.on('unhandledRejection', error => {
+   // Will print "unhandledRejection err is not defined"
+   console.log('unhandledRejection ----- ', error.message);
+ });

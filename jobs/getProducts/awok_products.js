@@ -19,7 +19,7 @@ async function getProductLinks(urlToScrape) {
     .wait(lib.waitTime)
     .catch(error => {
       haveMore = false;
-      console.error('Error start scraping init', urlToScrape, error);
+      console.error('Error start scraping init', urlToScrape, error, '--------------------------------');
     })
 
   /** 
@@ -71,6 +71,14 @@ async function getProductLinks(urlToScrape) {
         console.error('scrape get data - ', error)
       })
 
+
+      /// remove this
+      if (url.replace('?PAGEN_1=3').length > 1){
+        haveMore = false;
+      }
+
+      
+
     /** 
      * Paginating if avalable */
     if (haveMore) {
@@ -88,5 +96,5 @@ async function getProductLinks(urlToScrape) {
   /** 
    * nightmare kill */
   console.log('kill nightmare - ', urlToScrape);
-  await nightmare.end();
+  // await nightmare.end();
 }

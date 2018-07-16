@@ -76,7 +76,7 @@ var self = {
 
     // nightmare.end();
     // pm2.killDaemon();
-    // process.exit(2);
+    process.exit(2);
 
   },
 

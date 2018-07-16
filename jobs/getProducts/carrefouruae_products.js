@@ -19,7 +19,7 @@ async function getProductLinks(urlToScrape) {
     .wait(lib.waitTime)
     .catch(error => {
       haveMore = false;
-      console.error('Error start scraping init', urlToScrape, error);
+      console.error('Error start scraping init', urlToScrape, error, '--------------------------------');
     })
 
   /** 
@@ -74,11 +74,11 @@ async function getProductLinks(urlToScrape) {
     /** 
      * Paginating if avalable */
     if (haveMore) {
-      var nextPageUrl = await nightmare
+      console.log('haveMore');
+      await nightmare
         .evaluate(function () {
-          return document.querySelectorAll('.plp-pagination__nav:last-child a')[0].href
+          document.querySelectorAll('.plp-pagination__nav:last-child a')[0].click();
         })
-        .goto(nextPageUrl)
         .catch(() => {
           haveMore = false;
         })

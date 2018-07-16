@@ -19,7 +19,7 @@ async function getProductLinks(urlToScrape) {
       .goto(urlToScrape)
       .wait(lib.waitTime)
       .catch(error => {
-        console.error('Error start scraping init', urlToScrape, error);
+        console.error('Error start scraping init', urlToScrape, error, '--------------------------------');
         haveMore = false;
         return;
       })

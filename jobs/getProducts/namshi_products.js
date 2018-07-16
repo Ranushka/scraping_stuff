@@ -2,7 +2,7 @@
 
 const Nightmare = require('nightmare');
 const lib = require('../../lib');
-const siteName = "justkidding";
+const siteName = "namshi";
 
 lib.start(siteName, getProductLinks);
 
@@ -19,37 +19,46 @@ async function getProductLinks(urlToScrape) {
     .wait(lib.waitTime)
     .catch(error => {
       haveMore = false;
-      console.error('Error start scraping init', urlToScrape, error, '--------------------------------');
+      console.error('Error start scraping init', urlToScrape, error);
     })
 
   /** 
-   * lopp until pagination false
-   */
+   * lopp until pagination false */
   while (haveMore) {
 
+    //
+    // ─── LOGING SCRAPING SITE URL ────────────────────────────────────
+    //
     var url = await nightmare.url();
-    console.log('inside while loop - ', url);
+    console.log(url);
 
     await nightmare
       .wait(lib.waitTime)
       .evaluate(function () {
 
         var links = [],
-          productList = document.querySelectorAll('.products-grid .item'),
-          pagination = document.getElementsByClassName('i-next') > 0,
-          brand = document.getElementsByClassName('block-title')[0].innerText;
+          productList = document.querySelectorAll('li.listing'),
+          pagination = Boolean(document.querySelectorAll('#next_page').length),
+          tagsElemnts = document.querySelectorAll('.breadcrumb li:not(:first-child)'),
+          tags = [];
+
+        /** 
+         * Start collecting product Data */
+        tagsElemnts.forEach(function (a) {
+          tags.push(a.innerText.replace('/', '').toLowerCase().trim())
+        })
 
         /** 
          * going through each product */
         productList.forEach(function (item) {
           links.push({
-            "name": item.getElementsByClassName('product-name')[0].innerText,
-            "url": item.getElementsByClassName('product-name')[0].href,
-            "price": item.readAttribute('data-v'),
-            "brand": brand,
-            "site": "justkidding",
-          });
-        });
+            "name": item.getElementsByClassName('description')[0].innerText.trim(),
+            "url": item.getElementsByClassName('product_listing_link')[0].href,
+            "price": item.getElementsByClassName('price')[0].innerText.replace('AED', '').trim(),
+            "brand": tags,
+            "site": "namshi",
+          })
+        })
 
         /** 
          * return all the values */
@@ -64,17 +73,15 @@ async function getProductLinks(urlToScrape) {
         await lib.PrepToSave(result.links, `${lib.APIbaseUrl}/api/products/createOrUpdate`, urlToScrape);
       })
       .catch(error => {
+        haveMore = false;
         console.error('scrape get data - ', error)
       })
 
     /** 
      * Paginating if avalable */
     if (haveMore) {
-      console.log('haveMore');
       await nightmare
-        .evaluate(function () {
-          document.getElementsByClassName('i-next')[0].click()
-        })
+        .click('#next_page')
         .catch(() => {
           haveMore = false;
         })

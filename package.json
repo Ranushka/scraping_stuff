@@ -11,9 +11,12 @@
   "dependencies": {
     "agenda": "^1.0.3",
     "agendash": "^0.4.0",
+    "child-process-promise": "^2.2.1",
     "nightmare": "^3.0.1",
     "node-fetch": "^2.1.2",
     "pm2": "^2.10.4",
+    "promisify-child-process": "^2.0.0",
+    "spawn-async": "0.0.1",
     "vo": "^4.0.2",
     "xvfb": "^0.2.3"
   }

@@ -1,67 +1,67 @@
 'use strict';
 
-
-const getProdutsDir = `${__dirname}/jobs/getProducts/`;
-const fs = require('fs');
-
-const {
-  spawn
-} = require('child_process');
-
-const lib = require('./lib');
-
-
 /** Get products all sites
  * loop through the files
  * located at ./lib/
  */
-fs.readdir(getProdutsDir, async (err, files) => {
+const getProdutsDir = `${__dirname}/jobs/getProducts/`;
+const fs = require('fs');
+const { spawn } = require('child_process')
 
-  console.time('sceapeAllTime');
+runEach();
 
-  for (let file of files) {
+async function runEach() {
 
-    console.log(file);
-
-    await runComand(getProdutsDir, file);
-
-    await console.log('file done - ', file)
-
-  }
-
-  console.timeEnd('sceapeAllTime');
-
-})
-
-
-async function runComand(getProdutsDir, file) {
-
-  let siteName = file.split('_')[0];
-
-  // await lib.resetScrapeLinks(siteName);
-
-  const T1 = spawn('node', [getProdutsDir + file]).stdout.on('data', (data) => {
-    console.log(data.toString());
+  fs.readdir(getProdutsDir, async (err, files) => {
+    console.time('sceapeAllTime');
+    for (let file of files) {
+      console.log(`start script ${file}`)
+      await runProductsComand(`${getProdutsDir + file}`)
+      console.log(`end script ${file}`)
+    }
+    console.timeEnd('sceapeAllTime');
   });
 
-
-  const T2 = spawn('node', [getProdutsDir + file]).stdout.on('data', (data) => {
-    console.log(data.toString());
-  });
-
-  const T3 = spawn('node', [getProdutsDir + file]).stdout.on('data', (data) => {
-    console.log(data.toString());
-  });
-
-  const T4 = spawn('node', [getProdutsDir + file]).stdout.on('data', (data) => {
-    console.log(data.toString());
-  });
-
-  await Promise.all([
-    T1, T2, T3, T4
-  ]);
+  console.log('ALL Scripts are done');
 
 }
+
+async function runProductsComand(url) {
+
+  var abc = await Promise.all([
+    promisfiedSpawn(url),
+    promisfiedSpawn(url),
+    promisfiedSpawn(url)
+  ])
+
+  return abc;
+
+}
+
+function promisfiedSpawn(url) {
+
+  return new Promise((resolve, reject) => {
+
+    console.log(`start ---- ${url}`)
+
+    let comand = spawn('node', [url])
+
+    comand.stdout.on('data', function (data) {
+      console.log('stdout: ' + data.toString());
+    })
+
+    comand.stderr.on('data', function (data) {
+      console.log('stderr: ' + data.toString());
+    })
+
+    comand.on('exit', function (data) {
+      console.log('child process exited with code ' + data.toString());
+      resolve(data.toString());
+    })
+
+  });
+
+};
 
 
 process.on('unhandledRejection', error => {
