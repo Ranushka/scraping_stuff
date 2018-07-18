@@ -2,6 +2,7 @@
 
 const Nightmare = require('nightmare');
 const lib = require('../../lib');
+const winston = require('winston')
 const siteName = "nisnass";
 
 lib.start(siteName, getProductLinks);
@@ -19,7 +20,7 @@ async function getProductLinks(urlToScrape) {
       .goto(urlToScrape)
       .wait(lib.waitTime)
       .catch(error => {
-        console.error('Error start scraping init', urlToScrape, error, '--------------------------------');
+        console.error('Error start scraping init', urlToScrape, error, '------------');
         haveMore = false;
         return;
       })

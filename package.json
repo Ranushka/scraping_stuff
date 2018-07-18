@@ -18,6 +18,7 @@
     "promisify-child-process": "^2.0.0",
     "spawn-async": "0.0.1",
     "vo": "^4.0.2",
+    "winston": "^3.0.0",
     "xvfb": "^0.2.3"
   }
 }

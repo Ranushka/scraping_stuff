@@ -5,6 +5,23 @@ const Nightmare = require('nightmare');
 const nightmare = Nightmare();
 const fetch = require('node-fetch');
 const crypto = require('crypto');
+const winston = require('winston')
+
+
+const logger = winston.createLogger({
+  transports: [
+    new winston.transports.File({
+      filename: 'combined.log',
+      level: 'info'
+    }),
+    new winston.transports.File({
+      filename: 'errors.log',
+      level: 'error'
+    })
+  ]
+});
+
+
 
 // xvfb.startSync();
 
@@ -90,7 +107,8 @@ var self = {
         return json;
       })
       .catch(error => {
-        console.log('getNewScrapURL error - ', error)
+        winston.log('error', 'get_new_scrape_url', error)
+        console.error('getNewScrapURL error - ', error)
       })
   },
 
@@ -133,6 +151,7 @@ var self = {
            }
          }
       } else {
+        winston.log('error', 'no_url_to_save', urlToScrape)
         console.error('No Urls to save', urlToScrape);
       }
    
@@ -150,13 +169,11 @@ var self = {
         body: jsonData
       })
       .catch(function (error) {
+        winston.log('error', 'db_save_fail', urlToScrape)
         console.error(`Error - ${saveUrl} :`, error);
       });
 
     await console.log('Save data Done');
-
-
-
     
   }
 

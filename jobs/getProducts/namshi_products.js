@@ -2,6 +2,7 @@
 
 const Nightmare = require('nightmare');
 const lib = require('../../lib');
+const winston = require('winston')
 const siteName = "namshi";
 
 lib.start(siteName, getProductLinks);
@@ -75,6 +76,7 @@ async function getProductLinks(urlToScrape) {
       .catch(error => {
         haveMore = false;
         console.error('scrape get data - ', error)
+        winston.log('error', 'scrape_get_data', urlToScrape)
       })
 
     /** 
@@ -84,6 +86,8 @@ async function getProductLinks(urlToScrape) {
         .click('#next_page')
         .catch(() => {
           haveMore = false;
+          console.error('paginating_error', url, error)
+          winston.log('error', 'paginating_error', url)
         })
     }
   }

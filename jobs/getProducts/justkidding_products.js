@@ -2,6 +2,7 @@
 
 const Nightmare = require('nightmare');
 const lib = require('../../lib');
+const winston = require('winston')
 const siteName = "justkidding";
 
 lib.start(siteName, getProductLinks);
@@ -19,7 +20,8 @@ async function getProductLinks(urlToScrape) {
     .wait(lib.waitTime)
     .catch(error => {
       haveMore = false;
-      console.error('Error start scraping init', urlToScrape, error, '--------------------------------');
+      console.error('Error start scraping init', urlToScrape, error, '------------');
+      winston.log('error', 'init_scraping_fail', urlToScrape)
     })
 
   /** 
@@ -64,7 +66,9 @@ async function getProductLinks(urlToScrape) {
         await lib.PrepToSave(result.links, `${lib.APIbaseUrl}/api/products/createOrUpdate`, urlToScrape);
       })
       .catch(error => {
+        haveMore = false;
         console.error('scrape get data - ', error)
+        winston.log('error', 'scrape_get_data', urlToScrape)
       })
 
     /** 
@@ -77,6 +81,7 @@ async function getProductLinks(urlToScrape) {
         })
         .catch(() => {
           haveMore = false;
+          winston.log('error', 'paginating_error', url)
         })
     }
   }

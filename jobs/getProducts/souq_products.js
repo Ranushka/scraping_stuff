@@ -3,7 +3,28 @@
 const Nightmare = require('nightmare');
 const nightmare = Nightmare();
 const lib = require('../../lib');
+const winston = require('winston')
 const siteName = "souq";
+
+// var logger = require('logger');
+
+// logger.errorLog.info('Test error log');
+// logger.accessLog.info('Test access log');
+
+// logger.log('info', 'This is an information message.');
+
+// winston.log('error', 'init_scraping_fail', 'dasdsa')
+
+var logger = require('./../../logger');
+
+// logger.errorLog.info('Test error log');
+// logger.accessLog.info('Test access log');
+
+// logger.log('info', 'This is an information message.');
+
+logger.log('info', 'Hello created log files!', 'dsads');
+logger.log('error', 'Hello created log files!', 'dsads');
+
 
 lib.start(siteName, getProductLinks);
 
@@ -18,7 +39,7 @@ async function getProductLinks(urlToScrape) {
     .goto(urlToScrape)
     .wait(lib.waitTime)
     .catch(error => {
-      console.error('Error start scraping init', urlToScrape, error, '--------------------------------');
+      console.error('Error start scraping init', urlToScrape, error, '------------');
       haveMore = false;
       return;
     })
@@ -70,6 +91,7 @@ async function getProductLinks(urlToScrape) {
       .catch(error => {
         haveMore = false;
         console.error('scrape get data - ', error)
+        winston.log('error', 'scrape_get_data', urlToScrape)
       })
 
     /** 
@@ -80,7 +102,8 @@ async function getProductLinks(urlToScrape) {
         .goto(`${urlToScrape}?section=2&page=${pageNum++}`)
         .catch(error => {
           haveMore = false;
-          console.error('haveMore - ', error)
+          console.error('paginating_error', url, error)
+          winston.log('error', 'paginating_error', url)
         })
     }
 
