@@ -31,6 +31,7 @@ async function runProductsComand(url) {
   var abc = await Promise.all([
     promisfiedSpawn(url),
     promisfiedSpawn(url),
+    promisfiedSpawn(url),
     promisfiedSpawn(url)
   ])
 

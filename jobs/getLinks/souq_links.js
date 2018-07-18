@@ -2,19 +2,9 @@
 
 const Nightmare = require('nightmare');
 const lib = require('../../lib');
-const winston = require('winston')
+const logger = require('./../../logger');
 
 console.log(`get main links start`);
-
-var logger = require('logger');
-
-// logger.errorLog.info('Test error log');
-// logger.accessLog.info('Test access log');
-
-logger.log('info', 'This is an information message.');
-
-
-
 
 var links = [
   "https://deals.souq.com/ae-en/baby-and-toys/cc/360"
@@ -56,7 +46,7 @@ async function getMultipalSoursLinks(urlToScrape) {
     })
     .catch(function (error) {
       console.error(`Error - `, error);
-      winston.log('error', 'get_sours_links', urlToScrape)
+      logger.error(`get_sours_links | ${urlToScrape}`)
     });
 
   /** nightmare kill */

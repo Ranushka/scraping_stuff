@@ -2,7 +2,7 @@
 
 const Nightmare = require('nightmare');
 const lib = require('../../lib');
-const winston = require('winston')
+const logger = require('./../../logger');
 
 console.log(`get main links start`);
 
@@ -44,7 +44,7 @@ async function getMultipalSoursLinks(urlToScrape) {
     })
     .catch(function (error) {
       console.error(`Error - `, error);
-      winston.log('error', 'get_sours_links', urlToScrape)
+      logger.error(`get_sours_links | ${urlToScrape}`)
     });
 
   /** nightmare kill */

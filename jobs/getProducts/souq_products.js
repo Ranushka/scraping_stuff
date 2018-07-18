@@ -3,28 +3,16 @@
 const Nightmare = require('nightmare');
 const nightmare = Nightmare();
 const lib = require('../../lib');
-const winston = require('winston')
-const siteName = "souq";
+const logger = require('./../../logger');
+const siteName = "souq"
 
-// var logger = require('logger');
+// logger.error(`init_scraping_fail | ${siteName} | ${siteName}`)
 
-// logger.errorLog.info('Test error log');
-// logger.accessLog.info('Test access log');
+logger.warn(`init_scraping_fail | ${siteName} | ${siteName}`)
+logger.warn(`init_scraping_fail | ${siteName} | ${siteName}`)
+// logger.warn({'init_scraping_fail', siteName, siteName})
 
-// logger.log('info', 'This is an information message.');
-
-// winston.log('error', 'init_scraping_fail', 'dasdsa')
-
-var logger = require('./../../logger');
-
-// logger.errorLog.info('Test error log');
-// logger.accessLog.info('Test access log');
-
-// logger.log('info', 'This is an information message.');
-
-logger.log('info', 'Hello created log files!', 'dsads');
-logger.log('error', 'Hello created log files!', 'dsads');
-
+console.log('sssss')
 
 lib.start(siteName, getProductLinks);
 
@@ -39,9 +27,9 @@ async function getProductLinks(urlToScrape) {
     .goto(urlToScrape)
     .wait(lib.waitTime)
     .catch(error => {
-      console.error('Error start scraping init', urlToScrape, error, '------------');
       haveMore = false;
-      return;
+      console.error('Error start scraping init', urlToScrape, error, '------------');
+      logger.error(`init_scraping_fail | ${urlToScrape}`)
     })
 
   /** 
@@ -50,7 +38,7 @@ async function getProductLinks(urlToScrape) {
 
     /** 
      * Visiting the first link */
-    var url = await nightmare.url();
+    var url = await nightmare.ursl();
     console.log('inside while loop - ', url);
 
     /** 
@@ -91,7 +79,7 @@ async function getProductLinks(urlToScrape) {
       .catch(error => {
         haveMore = false;
         console.error('scrape get data - ', error)
-        winston.log('error', 'scrape_get_data', urlToScrape)
+        logger.error(`init_scraping_fail | ${url} | ${error}`)
       })
 
     /** 
@@ -102,8 +90,8 @@ async function getProductLinks(urlToScrape) {
         .goto(`${urlToScrape}?section=2&page=${pageNum++}`)
         .catch(error => {
           haveMore = false;
-          console.error('paginating_error', url, error)
-          winston.log('error', 'paginating_error', url)
+
+          logger.error(`paginating_error | ${url} | ${error}`)
         })
     }
 

@@ -2,7 +2,7 @@
 
 const Nightmare = require('nightmare');
 const lib = require('../../lib');
-const winston = require('winston')
+const logger = require('./../../logger');
 const siteName = "nisnass";
 
 lib.start(siteName, getProductLinks);
@@ -74,7 +74,9 @@ async function getProductLinks(urlToScrape) {
         await await lib.PrepToSave(result.links, `${lib.APIbaseUrl}/api/products/createOrUpdate`, urlToScrape);
       })
       .catch(error => {
+        haveMore = false;
         console.error('scrape get data - ', error)
+        logger.error(`init_scraping_fail | ${url} | ${error}`)
       })
 
     /** 
