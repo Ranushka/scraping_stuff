@@ -6,14 +6,6 @@ const lib = require('../../lib');
 const logger = require('./../../logger');
 const siteName = "souq"
 
-// logger.error(`init_scraping_fail | ${siteName} | ${siteName}`)
-
-logger.warn(`init_scraping_fail | ${siteName} | ${siteName}`)
-logger.warn(`init_scraping_fail | ${siteName} | ${siteName}`)
-// logger.warn({'init_scraping_fail', siteName, siteName})
-
-console.log('sssss')
-
 lib.start(siteName, getProductLinks);
 
 async function getProductLinks(urlToScrape) {
