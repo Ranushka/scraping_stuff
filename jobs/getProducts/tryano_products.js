@@ -11,6 +11,10 @@ async function getProductLinks(urlToScrape) {
   let haveMore = true,
     nightmare = new Nightmare();
 
+  /** 
+   * getting 72 products to the page */
+  urlToScrape = `${urlToScrape}?product_list_limit=72`;
+
   console.log('start scraping init', urlToScrape);
 
   /** 
