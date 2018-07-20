@@ -88,7 +88,7 @@ async function getProductLinks(urlToScrape) {
         .evaluate(function () {
           document.querySelectorAll('.modern-page-next')[0].click();
         })
-        .catch(() => {
+        .catch(error => {
           haveMore = false;
           logger.error(`paginating_error | ${url} | ${error}`)
         })

@@ -80,7 +80,6 @@ async function getProductLinks(urlToScrape) {
         })
         .catch(error => {
           haveMore = false;
-         
           logger.error(`paginating_error | ${url} | ${error}`)
         })
     }

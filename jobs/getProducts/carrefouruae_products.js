@@ -80,9 +80,8 @@ async function getProductLinks(urlToScrape) {
         .evaluate(function () {
           document.querySelectorAll('.plp-pagination__nav:last-child a')[0].click();
         })
-        .catch(() => {
+        .catch(error => {
           haveMore = false;
-         
           logger.error(`paginating_error | ${url} | ${error}`)
         })
     }

@@ -83,9 +83,8 @@ async function getProductLinks(urlToScrape) {
         await lib.PrepToSave(result.links, `${lib.APIbaseUrl}/api/products/createOrUpdate`, urlToScrape);
       })
       .catch(error => {
-          haveMore = false;
-         
-          logger.error(`paginating_error | ${url} | ${error}`)
+        haveMore = false;
+        logger.error(`paginating_error | ${url} | ${error}`)
       })
   }
 

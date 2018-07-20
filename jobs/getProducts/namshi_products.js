@@ -83,9 +83,8 @@ async function getProductLinks(urlToScrape) {
     if (haveMore) {
       await nightmare
         .click('#next_page')
-        .catch(() => {
+        .catch(error => {
           haveMore = false;
-         
           logger.error(`paginating_error | ${url} | ${error}`)
         })
     }
