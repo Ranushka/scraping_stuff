@@ -5,6 +5,8 @@ const lib = require('../../lib');
 const logger = require('../../logger');
 const siteName = "justkidding";
 
+lib.waitTime = 10000;
+
 lib.start(siteName, getProductLinks);
 
 async function getProductLinks(urlToScrape) {

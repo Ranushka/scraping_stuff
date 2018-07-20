@@ -48,7 +48,7 @@ async function getProductLinks(urlToScrape) {
         productList.forEach(function (item) {
           links.push({
             "name": item.getElementsByClassName('productslist_item_title')[0].innerText.trim(),
-            "url": item.href,
+            "url": item.href.split('/dp-')[0], // split url to skip cash pagers
             "price": item.getElementsByClassName('productslist_item_pricenew')[0].innerText.replace(' AED', ''),
             "brand": tags,
             "site": "awok",

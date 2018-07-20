@@ -31,7 +31,7 @@ async function getMultipalSoursLinks(urlToScrape) {
       brandPageList.forEach(function (item) {
         brandPageLinks.push({
           "name": item.innerText.trim(),
-          "url": window.location.origin + item.getAttribute('data-loadurl'),
+          "url": window.location.origin + item.getAttribute('data-loadurl').split('/ds-')[0], // split url to skip cash pagers
           "site": "awok",
           "scrap": false
         });
