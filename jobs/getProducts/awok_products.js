@@ -72,14 +72,6 @@ async function getProductLinks(urlToScrape) {
         logger.error(`init_scraping_fail | ${url} | ${error}`)
       })
 
-
-      /// remove this
-      if (url.replace('?PAGEN_1=3').length > 1){
-        haveMore = false;
-      }
-
-      
-
     /** 
      * Paginating if avalable */
     if (haveMore) {
