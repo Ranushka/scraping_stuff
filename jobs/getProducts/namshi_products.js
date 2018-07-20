@@ -2,7 +2,7 @@
 
 const Nightmare = require('nightmare');
 const lib = require('../../lib');
-const logger = require('./../../logger');
+const logger = require('../../logger');
 const siteName = "namshi";
 
 lib.start(siteName, getProductLinks);
@@ -75,7 +75,6 @@ async function getProductLinks(urlToScrape) {
       })
       .catch(error => {
         haveMore = false;
-        console.error('scrape get data - ', error)
         logger.error(`init_scraping_fail | ${url} | ${error}`)
       })
 

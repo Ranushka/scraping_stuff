@@ -3,7 +3,7 @@
 const Nightmare = require('nightmare');
 const lib = require('../../lib');
 const siteName = "gap";
-const logger = require('./../../logger');
+const logger = require('../../logger');
 
 lib.start(siteName, getProductLinks);
 
@@ -25,8 +25,7 @@ async function getProductLinks(urlToScrape) {
     })
     .catch(error => {
       haveMore = false;
-      console.error('Error start scraping init', urlToScrape, error, '------------');
-      logger.error(`init_scraping_fail | ${urlToScrape}`)
+      logger.error(`init_scraping_fail | ${urlToScrape} | ${error}`)
     })
 
   /** 
@@ -39,7 +38,7 @@ async function getProductLinks(urlToScrape) {
       .goto(`${urlToScrape}?p=${page++}`)
       .catch(error => {
         haveMore = false;
-        console.error('Error start scraping init', urlToScrape, error, '------------');
+        
         logger.log('error', 'paginating_error', urlToScrape)
       })
 

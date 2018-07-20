@@ -2,7 +2,7 @@
 
 const Nightmare = require('nightmare');
 const lib = require('../../lib');
-const logger = require('./../../logger');
+const logger = require('../../logger');
 
 console.log(`get main links start`);
 

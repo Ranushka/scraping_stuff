@@ -8,13 +8,13 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceFolder}/jobs/getProducts/souq_products.js"
+            // "program": "${workspaceFolder}/jobs/getProducts/souq_products.js"
             // "program": "${workspaceFolder}/jobs/getProducts/justkidding_products.js"
             // "program": "${workspaceFolder}/jobs/getProducts/gap_products.js"
             // "program": "${workspaceFolder}/jobs/getProducts/awok_products.js" 
             // "program": "${workspaceFolder}/jobs/getProducts/nisnass_products.js"
             // "program": "${workspaceFolder}/getLinks.js"
-            // "program": "${workspaceFolder}/getProducts.js"
+            "program": "${workspaceFolder}/getProducts.js"
             // "program": "${workspaceFolder}/run.js"
         }
     ]

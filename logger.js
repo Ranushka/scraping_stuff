@@ -24,6 +24,16 @@ var winston = require('winston');
 // });
 
 
+/* LOGGER EXAMPLES
+  var log = require('./logger.js')
+  log.trace('testing')
+  log.debug('testing')
+  log.info('testing')
+  log.warn('testing')
+  log.crit('testing')
+  log.fatal('testing')
+ */
+
 const fs = require('fs');
 const {
   createLogger,
@@ -44,8 +54,9 @@ const logger = createLogger({
         format.simple()
       )
     }),
-    new transports.Stream({
-      stream: fs.createWriteStream('./logs/info.log')
+    new winston.transports.File({
+      filename: './logs/info.log',
+      level: 'info'
     })
   ]
 })
@@ -127,14 +138,6 @@ module.exports = logger
 //     origLog.apply(logger, arguments)
 //   }
 // }
-// /* LOGGER EXAMPLES
-//   var log = require('./log.js')
-//   log.trace('testing')
-//   log.debug('testing')
-//   log.info('testing')
-//   log.warn('testing')
-//   log.crit('testing')
-//   log.fatal('testing')
-//  */
+
 
 // module.exports = logger

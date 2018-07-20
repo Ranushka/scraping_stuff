@@ -7,6 +7,7 @@
 const getProdutsDir = `${__dirname}/jobs/getProducts/`;
 const fs = require('fs');
 const { spawn } = require('child_process')
+const logger = require('./logger');
 
 runEach();
 
@@ -15,25 +16,25 @@ async function runEach() {
   fs.readdir(getProdutsDir, async (err, files) => {
     console.time('sceapeAllTime');
     for (let file of files) {
-      console.log(`start script ${file}`)
+      logger.info(`start script ${file}`)
       await runProductsComand(`${getProdutsDir + file}`)
-      console.log(`end script ${file}`)
+      logger.info(`end script ${file}`)
     }
     console.timeEnd('sceapeAllTime');
   });
 
-  console.log('ALL Scripts are done');
+  logger.info(`ALL Scripts are done`)
 
 }
 
 async function runProductsComand(url) {
 
-  var abc = await Promise.all([
-    promisfiedSpawn(url),
-    promisfiedSpawn(url),
-    promisfiedSpawn(url),
-    promisfiedSpawn(url)
-  ])
+      let p1 = promisfiedSpawn(url)
+      let p2 = promisfiedSpawn(url)
+      let p3 = promisfiedSpawn(url)
+      let p4 = promisfiedSpawn(url)
+
+  var abc = await Promise.all([p1, p2, p3, p4])
 
   return abc;
 
@@ -41,7 +42,7 @@ async function runProductsComand(url) {
 
 function promisfiedSpawn(url) {
 
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
 
     console.log(`start ---- ${url}`)
 
@@ -56,7 +57,7 @@ function promisfiedSpawn(url) {
     })
 
     comand.on('exit', function (data) {
-      console.log('child process exited with code ' + data.toString());
+      console.log(`child process exited with code | ${data.toString()} | ${url}`);
       resolve(data.toString());
     })
 

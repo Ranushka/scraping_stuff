@@ -2,7 +2,7 @@
 
 const Nightmare = require('nightmare');
 const lib = require('../../lib');
-const logger = require('./../../logger');
+const logger = require('../../logger');
 const siteName = "justkidding";
 
 lib.start(siteName, getProductLinks);
@@ -20,8 +20,7 @@ async function getProductLinks(urlToScrape) {
     .wait(lib.waitTime)
     .catch(error => {
       haveMore = false;
-      console.error('Error start scraping init', urlToScrape, error, '------------');
-      logger.error(`init_scraping_fail | ${urlToScrape}`)
+      logger.error(`init_scraping_fail | ${urlToScrape} | ${error}`)
     })
 
   /** 
@@ -67,7 +66,6 @@ async function getProductLinks(urlToScrape) {
       })
       .catch(error => {
         haveMore = false;
-        console.error('scrape get data - ', error)
         logger.error(`init_scraping_fail | ${url} | ${error}`)
       })
 
