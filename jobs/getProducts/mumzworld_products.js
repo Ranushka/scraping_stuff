@@ -69,9 +69,8 @@ async function getProductLinks(urlToScrape) {
         logger.error(`init_scraping_fail | ${url} | ${error}`)
       })
 
-    //
-    // ─── CHECK HAVE MORE TO THE PAGE ─────────────────────────────────
-    //
+    /** 
+     * Paginating if avalable */
     if (haveMore) {
       console.log('haveMore');
       await nightmare

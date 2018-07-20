@@ -28,9 +28,13 @@ async function getProductLinks(urlToScrape) {
    */
   while (haveMore) {
 
+    /** 
+     * now scraping url */
     var url = await nightmare.url();
     console.log('inside while loop - ', url);
 
+    /** 
+     * Start collecting product Data */
     await nightmare
       .wait(lib.waitTime)
       .evaluate(function () {
