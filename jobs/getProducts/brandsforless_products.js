@@ -3,7 +3,7 @@
 const Nightmare = require('nightmare');
 const lib = require('../../lib');
 const logger = require('../../logger');
-const siteName = "tryano";
+const siteName = "brandsforless";
 
 lib.start(siteName, getProductLinks);
 
@@ -44,7 +44,7 @@ async function getProductLinks(urlToScrape) {
 
         var links = [],
           productList = document.querySelectorAll('.moduleBox'),
-          pagination = Boolean(document.querySelectorAll('.toolbar__pager-item--next').length);
+          pagination = Boolean(!document.querySelectorAll('[id*=NextButton][onclick="return false;"]').length);
 
         /** 
          * going through each product */
@@ -80,7 +80,7 @@ async function getProductLinks(urlToScrape) {
     if (haveMore) {
       await nightmare
         .evaluate(function () {
-          document.querySelectorAll('.toolbar__pager-item--next .action')[0].click();
+          document.querySelectorAll('[id*=NextButton]')[0].click();
         })
         .catch(error => {
           haveMore = false;
