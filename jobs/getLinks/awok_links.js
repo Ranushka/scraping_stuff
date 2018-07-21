@@ -7,7 +7,7 @@ const logger = require('../../logger');
 console.log(`get main links start`);
 
 var links = [
-  "https://ae.awok.com/babies-kids-games/ds-1025/"
+  "https://ae.awok.com/help-info/site-map/"
 ];
 
 start();
@@ -26,12 +26,15 @@ async function getMultipalSoursLinks(urlToScrape) {
     .goto(`${urlToScrape}`)
     .wait(2000)
     .evaluate(function () {
-      var brandPageList = document.querySelectorAll('.sub_cat .disableonclick');
+
+      $('span').remove() // remove unvonted spans frm the dom
+
+      var brandPageList = document.querySelectorAll('.sitemap_contant li a');
       var brandPageLinks = [];
       brandPageList.forEach(function (item) {
         brandPageLinks.push({
           "name": item.innerText.trim(),
-          "url": window.location.origin + item.getAttribute('data-loadurl').split('/ds-')[0], // split url to skip cash pagers
+          "url": window.location.origin + item.href.split('/ds-')[0], // split url to skip cash pagers
           "site": "awok",
           "scrap": false
         });
