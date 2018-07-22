@@ -7,7 +7,9 @@ const logger = require('../../logger');
 console.log(`get main links start`);
 
 var links = [
-  "https://www.elabelz.com/en_ae/",
+  "https://www.elabelz.com/en_ae/women/",
+  "https://www.elabelz.com/en_ae/men/",
+  "https://www.elabelz.com/en_ae/kids/"
 ];
 
 start();
