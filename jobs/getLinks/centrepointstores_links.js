@@ -7,11 +7,7 @@ const logger = require('../../logger');
 console.log(`get main links start`);
 
 var links = [
-  "https://www.babyshopstores.com/ae/en/department/clothing",
-  "https://www.babyshopstores.com/ae/en/department/babygear",
-  "https://www.babyshopstores.com/ae/en/department/toys",
-  "https://www.babyshopstores.com/ae/en/search/?q=%20%3AallCategories%3Adiapers",
-  "https://www.babyshopstores.com/ae/en/department/nurseryandfeeding"
+  "https://www.centrepointstores.com/ae/en/"
 ];
 
 start();
@@ -30,7 +26,10 @@ async function getMultipalSoursLinks(urlToScrape) {
     .goto(`${urlToScrape}`)
     .wait(2000)
     .evaluate(function () {
-      var brandPageList = document.querySelectorAll('#filter-form-sub-categories li:not(.visible-xs)>a');
+
+      $('.nav-wrap>ul:gt(4)').remove()// remove unvonted elements
+
+      var brandPageList = document.querySelectorAll('#page-header .nav-wrap .has-drop strong a');
       var brandPageLinks = [];
       brandPageList.forEach(function (item) {
 

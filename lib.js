@@ -12,7 +12,7 @@ const logger = require('./logger');
 var self = {
   nextExists: true,
   waitTime: 4000,
-  APIbaseUrl: "https://sitedata-mum.herokuapp.com",
+  APIbaseUrl: "http://rd0sobnyof.nlnode.webrahost.eu",
   // APIbaseUrl: "http://localhost:3789",
 
   remainScrapeLinksCount: async function (siteName) {
