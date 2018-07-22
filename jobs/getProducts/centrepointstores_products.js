@@ -3,7 +3,7 @@
 const Nightmare = require('nightmare');
 const lib = require('../../lib');
 const logger = require('../../logger');
-const siteName = "babyshopstores";
+const siteName = "centrepointstores";
 
 lib.start(siteName, getProductLinks);
 
@@ -56,7 +56,7 @@ async function getProductLinks(urlToScrape) {
             "url": item.querySelectorAll(".product-link")[0].href,
             "price": item.querySelectorAll('[itemprop="price"]')[0].innerText.trim(),
             "brand": tags,
-            "site": "babyshopstores",
+            "site": "centrepointstores",
           });
         });
 

@@ -36,7 +36,7 @@ async function getMultipalSoursLinks(urlToScrape) {
         brandPageLinks.push({
           "name": item.innerText.trim(),
           "url": item.href,
-          "site": "babyshopstores",
+          "site": "centrepointstores",
           "scrap": false
         });
 
