@@ -142,8 +142,9 @@ var self = {
   },
 
   saveToDb: async function (saveUrl, jsonData) {
-    await console.log('Save data Start');
-
+    await console.log('Save data Start')
+    let t1 = new Date()
+    
     // send data to save
     await fetch(saveUrl, {
         method: 'POST',
@@ -154,10 +155,11 @@ var self = {
       })
       .catch(function (error) {
         logger.log('error', `db_save_fail | ${urlToScrape}`)
-        console.error(`Error - ${saveUrl} :`, error);
+        console.error(`Error - ${saveUrl} :`, error)
       });
 
-    await console.log('Save data Done');
+    var t2 = new Date()
+    await console.log(`Save data Done in ${ Math.floor((t2 - t1/1000) % 60) }`)
     
   }
 
