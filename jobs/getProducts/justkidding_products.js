@@ -19,7 +19,7 @@ async function getProductLinks(urlToScrape) {
    * visiting init page url */
   await nightmare
     .goto(urlToScrape)
-    .wait(20000)
+    .wait(50000)
     .catch(error => {
       haveMore = false;
       logger.error(`init_scraping_fail | ${urlToScrape} | ${error}`)

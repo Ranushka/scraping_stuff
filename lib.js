@@ -12,8 +12,8 @@ const logger = require('./logger');
 var self = {
   nextExists: true,
   waitTime: 4000,
-  APIbaseUrl: "http://rd0sobnyof.nlnode.webrahost.eu",
-  // APIbaseUrl: "http://localhost:3789",
+  // APIbaseUrl: "http://rd0sobnyof.nlnode.webrahost.eu",
+  APIbaseUrl: "http://localhost:60740",
 
   remainScrapeLinksCount: async function (siteName) {
     return await fetch(`${lib.APIbaseUrl}/api/links/remainScrapeLinksCount?site=${siteName}`, {
@@ -159,8 +159,20 @@ var self = {
       });
 
     var t2 = new Date()
-    await console.log(`Save data Done in ${ Math.floor((t2 - t1/1000) % 60) }`)
+    await console.log(`Save data Done in ${ this.convertMS(t2 - t1) }`)
     
+  },
+
+  convertMS: function(milliseconds) {
+    var day, hour, minute, seconds;
+    seconds = Math.floor(milliseconds / 1000);
+    minute = Math.floor(seconds / 60);
+    seconds = seconds % 60;
+    hour = Math.floor(minute / 60);
+    minute = minute % 60;
+    day = Math.floor(hour / 24);
+    hour = hour % 24;
+    return `{ day: ${day}, hour: ${hour}, minute: ${minute}, seconds: ${seconds} }`;
   }
 
 };
