@@ -16,6 +16,8 @@ runEach();
 runEach();
 runEach();
 runEach();
+runEach();
+runEach();
 
 async function runEach() {
 
@@ -68,7 +70,8 @@ function promisfiedSpawn(url) {
 
     comand.on('exit', function (data) {
       let t2 = new Date()
-      console.log(`End ---- | ${ lib.convertMS(t2 - t1) } | ${fileName}`);
+      logger.info(`End ---- | ${ lib.convertMS(t2 - t1) } | ${fileName}`)
+      console.log(`End ---- | ${ lib.convertMS(t2 - t1) } | ${fileName}`)
       resolve(data.toString());
     })
 
