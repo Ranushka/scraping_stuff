@@ -49,7 +49,7 @@ async function getProductLinks(urlToScrape) {
             "name": item.querySelectorAll('.product-name a')[0].href,
             "url": item.querySelectorAll('.product-name a')[0].href,
             "price": item.querySelectorAll('.price')[0].innerText.replace('AED', '').trim(),
-            "brand": item.querySelectorAll('.designer')[0].innerText.trim(),
+            "category": item.querySelectorAll('.designer')[0].innerText.trim(),
             "site": "childrensalon",
           })
         })

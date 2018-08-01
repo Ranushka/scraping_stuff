@@ -57,7 +57,7 @@ async function getProductLinks(urlToScrape) {
             "name": item.getElementsByClassName("Product-name")[0].innerText.trim(),
             "url": item.getElementsByClassName("Product-details")[0].href,
             "price": item.getElementsByClassName("Product-minPrice")[0].innerText.replace(' AED', ''),
-            "brand": item.getElementsByClassName("Product-brand")[0].innerText.trim(),
+            "category": item.getElementsByClassName("Product-brand")[0].innerText.trim(),
             "site": "nisnass",
           });
         });

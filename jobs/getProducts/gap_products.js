@@ -65,7 +65,7 @@ async function getProductLinks(urlToScrape) {
             "name": data.name,
             "url": item.href,
             "price": data.price,
-            "brand": data.dimension6,
+            "category": data.dimension6,
             "site": "gap",
           });
         });

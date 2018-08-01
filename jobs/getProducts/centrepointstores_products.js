@@ -55,7 +55,7 @@ async function getProductLinks(urlToScrape) {
             "name": item.querySelectorAll('[itemprop="name"]')[0].innerText.trim(),
             "url": item.querySelectorAll(".product-link")[0].href,
             "price": item.querySelectorAll('[itemprop="price"]')[0].innerText.trim(),
-            "brand": tags,
+            "category": tags,
             "site": "centrepointstores",
           });
         });

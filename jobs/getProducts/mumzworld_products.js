@@ -47,7 +47,7 @@ async function getProductLinks(urlToScrape) {
             "name": item.title,
             "url": item.href,
             "price": item.dataset.pprice,
-            "brand": item.dataset.pbrand,
+            "category": item.dataset.pbrand,
             "site": 'mumzworld',
           });
         });

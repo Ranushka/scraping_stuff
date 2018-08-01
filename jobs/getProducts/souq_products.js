@@ -53,7 +53,7 @@ async function getProductLinks(urlToScrape) {
             "name": item.querySelectorAll('.itemTitle a')[0].innerText.trim(),
             "url": item.querySelectorAll('.itemTitle a')[0].href,
             "price": item.querySelectorAll('h5.price')[0].innerText.replace(' AED', '').trim(),
-            "brand": item.querySelectorAll('[data-subcategory]')[0].getAttribute('data-subcategory'),
+            "category": item.querySelectorAll('[data-subcategory]')[0].getAttribute('data-subcategory'),
             "site": "souq",
             "currency": "AED",
             "img": item.querySelectorAll('.img-size-medium')[0].src,

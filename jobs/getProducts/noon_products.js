@@ -50,7 +50,7 @@ async function getProductLinks(urlToScrape) {
             "name": item.querySelectorAll('.name')[0].innerText.trim(),
             "url": item.querySelectorAll('.product')[0].href,
             "price": item.querySelectorAll('.sellingPrice')[0].innerText.trim().replace('AED ', ''),
-            "brand": brand,
+            "category": brand,
             "site": "noon",
             "currency": "AED",
             "img": item.querySelectorAll('.mediaContainer img')[0].src,

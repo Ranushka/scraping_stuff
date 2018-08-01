@@ -50,7 +50,7 @@ async function getProductLinks(urlToScrape) {
             "name": item.querySelectorAll('.comp-productcard__img')[0].title.trim(),
             "url": item.querySelectorAll(".comp-productcard__wrap > a")[0].href,
             "price": item.querySelectorAll('.comp-productcard__price')[0].innerText.trim(),
-            "brand": tags,
+            "category": tags,
             "site": "carrefouruae",
           });
         });

@@ -53,7 +53,7 @@ async function getProductLinks(urlToScrape) {
             "name": item.querySelectorAll('.itemname')[0].innerText.trim().toLowerCase(),
             "url": item.querySelectorAll('.imageBox a')[0].href,
             "price": item.querySelectorAll('.price')[0].innerText.replace('AED', '').trim(),
-            "brand": item.querySelectorAll('.brandname')[0].innerText.trim().toLowerCase(),
+            "category": item.querySelectorAll('.brandname')[0].innerText.trim().toLowerCase(),
             "site": "brandsforless",
           })
         })

@@ -60,7 +60,7 @@ async function getProductLinks(urlToScrape) {
             "name": item.title,
             "url": item.href,
             "price": item.querySelectorAll('.price .price')[0].innerText.replace('AED ', ''),
-            "brand": item.querySelectorAll('.brand')[0].innerText.trim(),
+            "category": item.querySelectorAll('.brand')[0].innerText.trim(),
             "site": "elabelz",
           })
         })

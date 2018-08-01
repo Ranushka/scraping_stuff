@@ -57,7 +57,7 @@ async function getProductLinks(urlToScrape) {
             "name": item.getElementsByClassName('product-name')[0].innerText,
             "url": item.getElementsByClassName('product-name')[0].href,
             "price": item.readAttribute('data-v'),
-            "brand": brand,
+            "category": brand,
             "site": "justkidding",
           });
         });

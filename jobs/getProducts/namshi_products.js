@@ -57,7 +57,7 @@ async function getProductLinks(urlToScrape) {
             "name": item.getElementsByClassName('description')[0].innerText.trim(),
             "url": item.getElementsByClassName('product_listing_link')[0].href,
             "price": item.getElementsByClassName('price')[0].innerText.replace('AED', '').trim(),
-            "brand": tags,
+            "category": tags,
             "site": "namshi",
           })
         })

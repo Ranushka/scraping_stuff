@@ -59,7 +59,7 @@ async function getProductLinks(urlToScrape) {
             "name": item.querySelectorAll('h4')[0].innerText.trim(),
             "url": item.querySelectorAll('.image-wrap a')[0].href,
             "price": item.getElementsByClassName('price')[0].innerText.replace('AED', ''),
-            "brand": tags,
+            "category": tags,
             "site": "kidore",
           });
         });

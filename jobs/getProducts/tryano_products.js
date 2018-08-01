@@ -61,7 +61,7 @@ async function getProductLinks(urlToScrape) {
             "name": item.getElementsByClassName('product-item-link')[0].innerText.trim(),
             "url": item.getElementsByClassName('product-item-link')[0].href,
             "price": item.querySelectorAll('[data-price-amount]')[0].dataset.priceAmount,
-            "brand": tags,
+            "category": tags,
             "site": "tryano",
             "currency": "AED",
             "img": item.querySelectorAll('.product-image-photo')[0].src,
