@@ -64,13 +64,9 @@ async function getProductLinks(urlToScrape) {
             "category": tags,
             "site": "tryano",
             "currency": "AED",
+            "brand": item.querySelectorAll('.product__brand')[0].innerText.trim(),
             "img": item.querySelectorAll('.product-image-photo')[0].src,
           };
-          // /** old price */
-          // var spcialPrice = item.querySelectorAll('.special-price [data-price-amount]');
-          // if(spcialPrice){
-          //   dataSet['price'] = spcialPrice.dataset.priceAmount;
-          // }
 
           links.push(thisDataSet);
         })
