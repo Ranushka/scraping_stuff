@@ -46,7 +46,8 @@ async function getProductLinks(urlToScrape) {
         /** 
          * going through each product */
         productList.forEach(function (item) {
-          links.push({
+
+          let thisDataSet = {
             "name": item.querySelectorAll('.name')[0].innerText.trim(),
             "url": item.querySelectorAll('.product')[0].href,
             "price": item.querySelectorAll('.sellingPrice')[0].innerText.trim().replace('AED ', ''),
@@ -54,18 +55,22 @@ async function getProductLinks(urlToScrape) {
             "site": "noon",
             "currency": "AED",
             "img": item.querySelectorAll('.mediaContainer img')[0].src,
-          });
+          }
+
+          /** set brand if avalable*/
+          let brandName = item.querySelectorAll('.fulfilmentContainer img');
+          if (brandName.length) {
+            thisDataSet["brand"] = item.querySelectorAll('.brand')[0].innerText.trim();
+          }
 
           /** free shiping promo */
-          let freeShipingText = item.querySelectorAll('.free-shipping');
-          if (freeShipingText) {
-            freeShipingText = freeShipingText[0].innerText.trim()
-            thisDataSet["shiping_cost"] = freeShipingText;
+          if (parseInt(thisDataSet.price) >= 100) {
+            thisDataSet["shiping_cost"] = 'free shipping';
           }
 
           /** order full filment */
-          let fulFillBy = item.querySelectorAll('.fulfilmentContainer').length;
-          if (fulFillBy) {
+          let fulFillBy = item.querySelectorAll('.fulfilmentContainer img');
+          if (fulFillBy.length) {
             thisDataSet["fulfill"] = true;
           }
 
