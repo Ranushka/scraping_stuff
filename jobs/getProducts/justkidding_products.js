@@ -5,13 +5,17 @@ const lib = require('../../lib');
 const logger = require('../../logger');
 const siteName = "justkidding";
 
-lib.waitTime = 10000;
+lib.waitTime = 5000;
 
 lib.start(siteName, getProductLinks);
 
 async function getProductLinks(urlToScrape) {
   let haveMore = true,
-    nightmare = new Nightmare();
+    nightmare = new Nightmare({
+      show: true,
+      width: 1280
+    });
+    
 
   console.log('start scraping init', urlToScrape);
 
@@ -19,7 +23,7 @@ async function getProductLinks(urlToScrape) {
    * visiting init page url */
   await nightmare
     .goto(urlToScrape)
-    .wait(50000)
+    // .wait(lib.waitTime)
     .catch(error => {
       haveMore = false;
       logger.error(`init_scraping_fail | ${urlToScrape} | ${error}`)

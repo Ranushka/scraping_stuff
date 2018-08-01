@@ -13,11 +13,6 @@ const logger = require('./logger');
 const lib = require('./lib');
 
 runEach();
-runEach();
-runEach();
-runEach();
-runEach();
-runEach();
 
 async function runEach() {
 
@@ -25,7 +20,7 @@ async function runEach() {
 
     /**
      * randamize the file list to change the order of rining */
-    files = files.sort(function (a, b) {
+    files = files.sort(async function (a, b) {
       return 0.5 - Math.random()
     });
 

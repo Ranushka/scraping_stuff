@@ -70,7 +70,7 @@ async function getProductLinks(urlToScrape) {
 
       })
       .then(async result => {
-        await await lib.PrepToSave(result.links, `${lib.APIbaseUrl}/api/products/createOrUpdate`, urlToScrape);
+        await await lib.PrepToSave(result.links, `${lib.APIbaseUrl}/api/products/create`, urlToScrape);
       })
       .catch(error => {
         haveMore = false;

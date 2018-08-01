@@ -57,13 +57,22 @@ async function getProductLinks(urlToScrape) {
         /** 
          * going through each product */
         productList.forEach(function (item) {
-          links.push({
+          var dataSet = {
             "name": item.getElementsByClassName('product-item-link')[0].innerText.trim(),
             "url": item.getElementsByClassName('product-item-link')[0].href,
             "price": item.querySelectorAll('[data-price-amount]')[0].dataset.priceAmount,
+            "currency": "AED",
+            "img": item.querySelectorAll('.product-image-photo')[0].src,
             "brand": tags,
             "site": "tryano",
-          })
+          };
+          // /** old price */
+          // var spcialPrice = item.querySelectorAll('.special-price [data-price-amount]');
+          // if(spcialPrice){
+          //   dataSet['price'] = spcialPrice.dataset.priceAmount;
+          // }
+
+          links.push(dataSet);
         })
 
         /** 
@@ -76,7 +85,7 @@ async function getProductLinks(urlToScrape) {
       })
       .then(async result => {
         haveMore = result.pagination;
-        await lib.PrepToSave(result.links, `${lib.APIbaseUrl}/api/products/createOrUpdate`, urlToScrape);
+        await lib.PrepToSave(result.links, `${lib.APIbaseUrl}/api/products/create`, urlToScrape);
       })
       .catch(error => {
         haveMore = false;
