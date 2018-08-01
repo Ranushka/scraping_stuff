@@ -52,7 +52,24 @@ async function getProductLinks(urlToScrape) {
             "price": item.querySelectorAll('.sellingPrice')[0].innerText.trim().replace('AED ', ''),
             "brand": brand,
             "site": "noon",
+            "currency": "AED",
+            "img": item.querySelectorAll('.mediaContainer img')[0].src,
           });
+
+          /** free shiping promo */
+          let freeShipingText = item.querySelectorAll('.free-shipping');
+          if (freeShipingText) {
+            freeShipingText = freeShipingText[0].innerText.trim()
+            thisDataSet["shiping_cost"] = freeShipingText;
+          }
+
+          /** order full filment */
+          let fulFillBy = item.querySelectorAll('.fulfilmentContainer').length;
+          if (fulFillBy) {
+            thisDataSet["fulfill"] = true;
+          }
+
+          links.push(thisDataSet);
         });
 
         /** 

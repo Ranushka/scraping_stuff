@@ -57,14 +57,14 @@ async function getProductLinks(urlToScrape) {
         /** 
          * going through each product */
         productList.forEach(function (item) {
-          var dataSet = {
+          let thisDataSet = {
             "name": item.getElementsByClassName('product-item-link')[0].innerText.trim(),
             "url": item.getElementsByClassName('product-item-link')[0].href,
             "price": item.querySelectorAll('[data-price-amount]')[0].dataset.priceAmount,
-            "currency": "AED",
-            "img": item.querySelectorAll('.product-image-photo')[0].src,
             "brand": tags,
             "site": "tryano",
+            "currency": "AED",
+            "img": item.querySelectorAll('.product-image-photo')[0].src,
           };
           // /** old price */
           // var spcialPrice = item.querySelectorAll('.special-price [data-price-amount]');
@@ -72,7 +72,7 @@ async function getProductLinks(urlToScrape) {
           //   dataSet['price'] = spcialPrice.dataset.priceAmount;
           // }
 
-          links.push(dataSet);
+          links.push(thisDataSet);
         })
 
         /** 
