@@ -38,7 +38,7 @@ async function getProductLinks(urlToScrape) {
       .goto(`${urlToScrape}?p=${page++}`)
       .catch(error => {
         haveMore = false;
-        
+
         logger.log('error', 'paginating_error', urlToScrape)
       })
 
@@ -60,14 +60,24 @@ async function getProductLinks(urlToScrape) {
         /** 
          * going through each product */
         productList.forEach(function (item) {
+
           var data = JSON.parse(URI.decode(item.getAttribute('data-gtm-product')));
-          links.push({
-            "name": data.name,
-            "url": item.href,
-            "price": data.price,
+
+          let thisDataSet = {
+            "brand": "",
             "category": data.dimension6,
+            "config": "",
+            "currency": "",
+            "fulfill": "",
+            "img": "",
+            "name": data.name,
+            "price": data.price,
+            "shiping_cost": "",
             "site": "gap",
-          });
+            "url": item.href,
+          }
+
+          links.push(thisDataSet);
         });
 
         /** 

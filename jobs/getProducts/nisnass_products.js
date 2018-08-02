@@ -35,8 +35,8 @@ async function getProductLinks(urlToScrape) {
     while (previousHeight !== currentHeight) {
       previousHeight = currentHeight;
       var currentHeight = await nightmare.evaluate(function () {
-        return document.body.scrollHeight;
-      })
+          return document.body.scrollHeight;
+        })
         .scrollTo(currentHeight, 0)
         .wait(2000);
     }
@@ -54,33 +54,39 @@ async function getProductLinks(urlToScrape) {
         /** 
          * going through each product */
         productList.forEach(function (item) {
+
           let thisDataSet = {
-              "name": item.getElementsByClassName("Product-name")[0].innerText.trim(),
-              "url": item.getElementsByClassName("Product-details")[0].href,
-              "price": item.getElementsByClassName("Product-minPrice")[0].innerText.replace(' AED', ''),
-              "category": category,
-              "site": "nisnass",
-              "img": item.querySelectorAll('.Product-image')[0].src,
-            }
+            "brand": "",
+            "category": category,
+            "config": "",
+            "currency": "",
+            "fulfill": "",
+            "img": item.querySelectorAll('.Product-image')[0].src,
+            "name": item.getElementsByClassName("Product-name")[0].innerText.trim(),
+            "price": item.getElementsByClassName("Product-minPrice")[0].innerText.replace(' AED', ''),
+            "shiping_cost": "",
+            "site": "nisnass",
+            "url": item.getElementsByClassName("Product-details")[0].href,
+          }
 
-            /** set brand if avalable*/
-            let brandName = item.querySelectorAll('.Product-brand');
-            if (brandName.length) {
-              thisDataSet["brand"] = brandName[0].innerText.trim();
-            }
+          /** set brand if avalable*/
+          let brandName = item.querySelectorAll('.Product-brand');
+          if (brandName.length) {
+            thisDataSet["brand"] = brandName[0].innerText.trim();
+          }
 
-            /** adding config options */
-            let config = item.querySelectorAll('.Product-sizeListLinks');
-            if (config.length) {
-              let configOptions = []
-              config.forEach((thisitem) => {
-                configOptions.push({
-                  "text": thisitem.innerText.trim(),
-                  "link": thisitem.href,
-                })
+          /** adding config options */
+          let config = item.querySelectorAll('.Product-sizeListLinks');
+          if (config.length) {
+            let configOptions = []
+            config.forEach((thisitem) => {
+              configOptions.push({
+                "text": thisitem.innerText.trim(),
+                "link": thisitem.href,
               })
-              thisDataSet["config"] = configOptions;
-            }
+            })
+            thisDataSet["config"] = configOptions;
+          }
 
           links.push(thisDataSet);
         });

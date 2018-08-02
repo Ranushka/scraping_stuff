@@ -57,16 +57,20 @@ async function getProductLinks(urlToScrape) {
         /** 
          * going through each product */
         productList.forEach(function (item) {
+
           let thisDataSet = {
-            "name": item.getElementsByClassName('product-item-link')[0].innerText.trim(),
-            "url": item.getElementsByClassName('product-item-link')[0].href,
-            "price": item.querySelectorAll('[data-price-amount]')[0].dataset.priceAmount,
-            "category": tags,
-            "site": "tryano",
-            "currency": "AED",
             "brand": item.querySelectorAll('.product__brand')[0].innerText.trim(),
+            "category": tags,
+            "config": "",
+            "currency": "AED",
+            "fulfill": "",
             "img": item.querySelectorAll('.product-image-photo')[0].src,
-          };
+            "name": item.getElementsByClassName('product-item-link')[0].innerText.trim(),
+            "price": item.querySelectorAll('[data-price-amount]')[0].dataset.priceAmount,
+            "shiping_cost": "",
+            "site": "tryano",
+            "url": item.getElementsByClassName('product-item-link')[0].href,
+          }
 
           links.push(thisDataSet);
         })

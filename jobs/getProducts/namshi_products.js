@@ -53,13 +53,22 @@ async function getProductLinks(urlToScrape) {
         /** 
          * going through each product */
         productList.forEach(function (item) {
-          links.push({
-            "name": item.getElementsByClassName('description')[0].innerText.trim(),
-            "url": item.getElementsByClassName('product_listing_link')[0].href,
-            "price": item.getElementsByClassName('price')[0].innerText.replace('AED', '').trim(),
+
+          let thisDataSet = {
+            "brand": "",
             "category": tags,
+            "config": "",
+            "currency": "",
+            "fulfill": "",
+            "img": "",
+            "name": item.getElementsByClassName('description')[0].innerText.trim(),
+            "price": item.getElementsByClassName('price')[0].innerText.replace('AED', '').trim(),
+            "shiping_cost": "",
             "site": "namshi",
-          })
+            "url": item.getElementsByClassName('product_listing_link')[0].href,
+          }
+
+          links.push(thisDataSet)
         })
 
         /** 

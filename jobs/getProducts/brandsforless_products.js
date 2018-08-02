@@ -49,13 +49,23 @@ async function getProductLinks(urlToScrape) {
         /** 
          * going through each product */
         productList.forEach(function (item) {
-          links.push({
-            "name": item.querySelectorAll('.itemname')[0].innerText.trim().toLowerCase(),
-            "url": item.querySelectorAll('.imageBox a')[0].href,
-            "price": item.querySelectorAll('.price')[0].innerText.replace('AED', '').trim(),
+
+          let thisDataSet = {
+            "brand": "",
+            "category": "",
+            "config": "",
             "category": item.querySelectorAll('.brandname')[0].innerText.trim().toLowerCase(),
+            "fulfill": "",
+            "img": "",
+            "name": item.querySelectorAll('.itemname')[0].innerText.trim().toLowerCase(),
+            "price": item.querySelectorAll('.price')[0].innerText.replace('AED', '').trim(),
+            "shiping_cost": "",
             "site": "brandsforless",
-          })
+            "url": item.querySelectorAll('.imageBox a')[0].href,
+          }
+
+          links.push(thisDataSet);
+
         })
 
         /** 

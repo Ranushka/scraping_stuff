@@ -45,13 +45,22 @@ async function getProductLinks(urlToScrape) {
         /** 
          * going through each product */
         productList.forEach(function (item) {
-          links.push({
-            "name": item.querySelectorAll('.product-name a')[0].href,
-            "url": item.querySelectorAll('.product-name a')[0].href,
-            "price": item.querySelectorAll('.price')[0].innerText.replace('AED', '').trim(),
+
+          let thisDataSet = {
+            "brand": "",
             "category": item.querySelectorAll('.designer')[0].innerText.trim(),
+            "config": "",
+            "currency": "",
+            "fulfill": "",
+            "img": "",
+            "name": item.querySelectorAll('.product-name a')[0].href,
+            "price": item.querySelectorAll('.price')[0].innerText.replace('AED', '').trim(),
+            "shiping_cost": "",
             "site": "childrensalon",
-          })
+            "url": item.querySelectorAll('.product-name a')[0].href,
+          }
+
+          links.push(thisDataSet)
         })
 
         /** 

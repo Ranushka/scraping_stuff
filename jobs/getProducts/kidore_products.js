@@ -55,13 +55,22 @@ async function getProductLinks(urlToScrape) {
         /** 
          * going through each product */
         productList.forEach(function (item) {
-          links.push({
-            "name": item.querySelectorAll('h4')[0].innerText.trim(),
-            "url": item.querySelectorAll('.image-wrap a')[0].href,
-            "price": item.getElementsByClassName('price')[0].innerText.replace('AED', ''),
+
+          let thisDataSet = {
+            "brand": "",
             "category": tags,
+            "config": "",
+            "currency": "",
+            "fulfill": "",
+            "img": "",
+            "name": item.querySelectorAll('h4')[0].innerText.trim(),
+            "price": item.getElementsByClassName('price')[0].innerText.replace('AED', ''),
+            "shiping_cost": "",
             "site": "kidore",
-          });
+            "url": item.querySelectorAll('.image-wrap a')[0].href,
+          }
+
+          links.push(thisDataSet);
         });
 
         /** 

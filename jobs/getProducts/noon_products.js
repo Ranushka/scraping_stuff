@@ -47,14 +47,19 @@ async function getProductLinks(urlToScrape) {
          * going through each product */
         productList.forEach(function (item) {
 
+
           let thisDataSet = {
-            "name": item.querySelectorAll('.name')[0].innerText.trim(),
-            "url": item.querySelectorAll('.product')[0].href,
-            "price": item.querySelectorAll('.sellingPrice')[0].innerText.trim().replace('AED ', ''),
+            "brand": "",
             "category": brand,
-            "site": "noon",
+            "config": "",
             "currency": "AED",
+            "fulfill": "",
             "img": item.querySelectorAll('.mediaContainer img')[0].src,
+            "name": item.querySelectorAll('.name')[0].innerText.trim(),
+            "price": item.querySelectorAll('.sellingPrice')[0].innerText.trim().replace('AED ', ''),
+            "shiping_cost": "",
+            "site": "noon",
+            "url": item.querySelectorAll('.product')[0].href,
           }
 
           /** set brand if avalable*/

@@ -46,13 +46,22 @@ async function getProductLinks(urlToScrape) {
         /** 
          * going through each product */
         productList.forEach(function (item) {
-          links.push({
-            "name": item.getElementsByClassName('productslist_item_title')[0].innerText.trim(),
-            "url": item.href.split('/dp-')[0], // split url to skip cash pagers
-            "price": item.getElementsByClassName('productslist_item_pricenew')[0].innerText.replace(' AED', ''),
+
+          let thisDataSet = {
+            "brand": "",
             "category": tags,
+            "config": "",
+            "currency": "",
+            "fulfill": "",
+            "img": "",
+            "name": item.getElementsByClassName('productslist_item_title')[0].innerText.trim(),
+            "price": item.getElementsByClassName('productslist_item_pricenew')[0].innerText.replace(' AED', ''),
+            "shiping_cost": "",
             "site": "awok",
-          });
+            "url": item.href.split('/dp-')[0], // split url to skip cash pagers
+          }
+
+          links.push(thisDataSet);
         });
 
         /** 

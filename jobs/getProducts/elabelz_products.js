@@ -52,17 +52,21 @@ async function getProductLinks(urlToScrape) {
          * going through each product */
         productList.forEach(function (item) {
 
-          // var priceregular = productList[0].querySelectorAll('.regular-price .price')
-          // var priceold = productList[0].querySelectorAll('.old-price .price')
-          // var pricespecial = productList[0].querySelectorAll('.special-price .price')
-
-          links.push({
-            "name": item.title,
-            "url": item.href,
-            "price": item.querySelectorAll('.price .price')[0].innerText.replace('AED ', ''),
+          let thisDataSet = {
+            "brand": "",
             "category": item.querySelectorAll('.brand')[0].innerText.trim(),
+            "config": "",
+            "currency": "",
+            "fulfill": "",
+            "img": "",
+            "name": item.title,
+            "price": item.querySelectorAll('.price .price')[0].innerText.replace('AED ', ''),
+            "shiping_cost": "",
             "site": "elabelz",
-          })
+            "url": item.href,
+          }
+
+          links.push(thisDataSet)
         })
 
         /** 

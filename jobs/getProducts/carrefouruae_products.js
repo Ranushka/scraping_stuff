@@ -46,13 +46,22 @@ async function getProductLinks(urlToScrape) {
         /** 
          * going through each product */
         productList.forEach(function (item) {
-          links.push({
-            "name": item.querySelectorAll('.comp-productcard__img')[0].title.trim(),
-            "url": item.querySelectorAll(".comp-productcard__wrap > a")[0].href,
-            "price": item.querySelectorAll('.comp-productcard__price')[0].innerText.trim(),
+
+          let thisDataSet = {
+            "brand": "",
             "category": tags,
+            "config": "",
+            "currency": "",
+            "fulfill": "",
+            "img": "",
+            "name": item.querySelectorAll('.comp-productcard__img')[0].title.trim(),
+            "price": item.querySelectorAll('.comp-productcard__price')[0].innerText.trim(),
+            "shiping_cost": "",
             "site": "carrefouruae",
-          });
+            "url": item.querySelectorAll(".comp-productcard__wrap > a")[0].href,
+          }
+
+          links.push(thisDataSet);
         });
 
         /** 

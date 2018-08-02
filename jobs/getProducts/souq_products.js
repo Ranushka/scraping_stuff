@@ -39,7 +39,7 @@ async function getProductLinks(urlToScrape) {
       .evaluate(function () {
         var links = [],
           abc = JSON.parse(document.querySelectorAll('.loadMore')[0].getAttribute('data-metadata'));
-          productList = document.querySelectorAll('.block-grid-large'),
+        productList = document.querySelectorAll('.block-grid-large'),
           pagination = abc.total_pages - abc.page;
 
         /** clean elements - remove was price */
@@ -50,14 +50,17 @@ async function getProductLinks(urlToScrape) {
         productList.forEach(function (item) {
 
           let thisDataSet = {
-            "name": item.querySelectorAll('.itemTitle a')[0].innerText.trim(),
-            "url": item.querySelectorAll('.itemTitle a')[0].href,
-            "price": item.querySelectorAll('h5.price')[0].innerText.replace(' AED', '').trim(),
-            "brand": item.querySelectorAll('[data-subcategory]')[0].getAttribute('data-brand'),
+            "brand": "",
             "category": item.querySelectorAll('[data-subcategory]')[0].getAttribute('data-subcategory'),
-            "site": "souq",
+            "config": "",
             "currency": "AED",
+            "fulfill": "",
             "img": item.querySelectorAll('.img-size-medium')[0].src,
+            "name": item.querySelectorAll('.itemTitle a')[0].innerText.trim(),
+            "price": item.querySelectorAll('h5.price')[0].innerText.replace(' AED', '').trim(),
+            "shiping_cost": "",
+            "site": "souq",
+            "url": item.querySelectorAll('.itemTitle a')[0].href,
           }
 
           /** free shiping promo */
@@ -72,7 +75,7 @@ async function getProductLinks(urlToScrape) {
           if (fulFillBy) {
             thisDataSet["fulfill"] = true;
           }
-  
+
           links.push(thisDataSet);
         });
 

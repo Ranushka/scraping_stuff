@@ -43,13 +43,22 @@ async function getProductLinks(urlToScrape) {
         /** 
          * going through each product */
         productList.forEach(function (item) {
-          links.push({
-            "name": item.title,
-            "url": item.href,
-            "price": item.dataset.pprice,
+
+          let thisDataSet = {
+            "brand": "",
             "category": item.dataset.pbrand,
+            "config": "",
+            "currency": "",
+            "fulfill": "",
+            "img": "",
+            "name": item.title,
+            "price": item.dataset.pprice,
+            "shiping_cost": "",
             "site": 'mumzworld',
-          });
+            "url": item.href,
+          }
+          
+          links.push(thisDataSet);
         });
 
         /** 

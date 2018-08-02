@@ -15,7 +15,7 @@ async function getProductLinks(urlToScrape) {
       show: true,
       width: 1280
     });
-    
+
 
   console.log('start scraping init', urlToScrape);
 
@@ -53,13 +53,22 @@ async function getProductLinks(urlToScrape) {
         /** 
          * going through each product */
         productList.forEach(function (item) {
-          links.push({
-            "name": item.getElementsByClassName('product-name')[0].innerText,
-            "url": item.getElementsByClassName('product-name')[0].href,
-            "price": item.readAttribute('data-v'),
+
+          let thisDataSet = {
+            "brand": "",
             "category": brand,
+            "config": "",
+            "currency": "",
+            "fulfill": "",
+            "img": "",
+            "name": item.getElementsByClassName('product-name')[0].innerText,
+            "price": item.readAttribute('data-v'),
+            "shiping_cost": "",
             "site": "justkidding",
-          });
+            "url": item.getElementsByClassName('product-name')[0].href,
+          }
+
+          links.push(thisDataSet);
         });
 
         /** 
