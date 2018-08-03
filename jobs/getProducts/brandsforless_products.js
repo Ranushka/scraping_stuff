@@ -67,6 +67,7 @@ async function getProductLinks(urlToScrape) {
             "url": item.querySelectorAll('.comp-productcard__img')[0].href,
           }
 
+          /** adding config options */
           let configs = item.querySelectorAll('.cat_tags span');
           if (configs.length) {
             let configItems = []

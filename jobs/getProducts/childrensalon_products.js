@@ -73,8 +73,7 @@ async function getProductLinks(urlToScrape) {
             let configOptions = []
             config.forEach((thisitem) => {
               configOptions.push({
-                "text": thisitem.innerText.trim(),
-                "link": "",
+                "text": thisitem.innerText.trim()
               })
             })
             thisDataSet["config"] = configOptions;
