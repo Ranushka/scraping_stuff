@@ -50,7 +50,7 @@ async function getProductLinks(urlToScrape) {
             "brand": "",
             "category": item.querySelectorAll('.designer')[0].innerText.trim(),
             "config": "",
-            "currency": "",
+            "currency": "AED",
             "fulfill": "",
             "img": "",
             "name": item.querySelectorAll('.product-name a')[0].href,

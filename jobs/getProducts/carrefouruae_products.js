@@ -51,7 +51,7 @@ async function getProductLinks(urlToScrape) {
             "brand": "",
             "category": tags,
             "config": "",
-            "currency": "",
+            "currency": "AED",
             "fulfill": "",
             "img": "",
             "name": item.querySelectorAll('.comp-productcard__img')[0].title.trim(),
