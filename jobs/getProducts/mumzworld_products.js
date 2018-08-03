@@ -45,8 +45,8 @@ async function getProductLinks(urlToScrape) {
         productList.forEach(function (item) {
 
           let thisDataSet = {
-            "brand": "",
-            "category": item.dataset.pbrand,
+            "brand": item.dataset.pbrand,
+            "category": "",
             "config": "",
             "currency": "AED",
             "fulfill": "",
@@ -56,6 +56,22 @@ async function getProductLinks(urlToScrape) {
             "shiping_cost": "",
             "site": 'mumzworld',
             "url": item.href,
+          }
+
+          /** set image */
+          let prodImage = item.querySelectorAll('.product-image img');
+          if (prodImage.length) {
+            thisDataSet["img"] = prodImage[0].src;
+          }
+
+          /** set category */
+          let categoryElement = document.querySelectorAll('.breadcrumbs li[class^=category]');
+          if (categoryElement.length) {
+            let categoryItems = []
+            categoryElement.forEach((thisitem) => {
+              categoryItems.push(thisitem.innerText.replace(' /', '').trim())
+            })
+            thisDataSet["category"] = categoryItems;
           }
 
           links.push(thisDataSet);

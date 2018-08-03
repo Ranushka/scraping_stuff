@@ -64,13 +64,13 @@ async function getProductLinks(urlToScrape) {
             "url": item.querySelectorAll('.imageBox a')[0].href,
           }
 
-          let cats = item.querySelectorAll('.cat_tags span');
-          if (cats.length) {
-            let catItems = []
-            cats.forEach((thisitem) => {
-              catItems.push(thisitem.innerText.trim().toLowerCase())
+          let configs = item.querySelectorAll('.cat_tags span');
+          if (configs.length) {
+            let configItems = []
+            configs.forEach((thisitem) => {
+              configItems.push(thisitem.innerText.trim().toLowerCase())
             })
-            thisDataSet["config"] = catItems;
+            thisDataSet["config"] = configItems;
           }
 
           links.push(thisDataSet);
