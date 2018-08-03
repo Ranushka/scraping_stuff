@@ -64,8 +64,8 @@ async function getProductLinks(urlToScrape) {
           var data = JSON.parse(URI.decode(item.getAttribute('data-gtm-product')));
 
           let thisDataSet = {
-            "brand": "",
-            "category": data.dimension6,
+            "brand": "gap",
+            "category": data.category.split('/'),
             "config": "",
             "currency": "AED",
             "fulfill": "",
@@ -75,6 +75,24 @@ async function getProductLinks(urlToScrape) {
             "shiping_cost": "",
             "site": "gap",
             "url": item.href,
+          }
+
+          /** adding config options */
+          let config = item.querySelectorAll('.sizes .owl-item:not(.cloned)');
+          if (config.length) {
+            let configOptions = []
+            config.forEach((thisitem) => {
+              configOptions.push({
+                "text": thisitem.innerText.trim()
+              })
+            })
+            thisDataSet["config"] = configOptions;
+          }
+
+          /** set image */
+          let prodImage = item.querySelectorAll('.img-loaded img');
+          if (prodImage.length) {
+            thisDataSet["img"] = prodImage[0].src;
           }
 
           links.push(thisDataSet);
