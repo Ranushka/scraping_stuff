@@ -57,6 +57,7 @@ async function getProductLinks(urlToScrape) {
             "price": item.querySelectorAll('.price')[0].innerText.replace('AED', '').trim(),
             "shiping_cost": "",
             "site": "childrensalon",
+            "sku": item.dataset.sku,
             "url": item.querySelectorAll('.product-name a')[0].href,
           }
 

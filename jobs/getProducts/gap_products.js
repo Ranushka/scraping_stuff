@@ -74,6 +74,7 @@ async function getProductLinks(urlToScrape) {
             "price": data.price,
             "shiping_cost": "",
             "site": "gap",
+            "sku": data.id,
             "url": item.href,
           }
 

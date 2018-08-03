@@ -69,7 +69,14 @@ async function getProductLinks(urlToScrape) {
             "price": item.querySelectorAll('[data-price-amount]')[0].dataset.priceAmount,
             "shiping_cost": "",
             "site": "tryano",
+            "sku": "",
             "url": item.getElementsByClassName('product-item-link')[0].href,
+          }
+
+          /** set sku */
+          let skuElement = item.getElementsByClassName("price-box");
+          if (skuElement.length) {
+            thisDataSet["sku"] = skuElement[0].dataset.productId;
           }
 
           links.push(thisDataSet);

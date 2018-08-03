@@ -59,6 +59,7 @@ async function getProductLinks(urlToScrape) {
             "price": item.querySelectorAll('.sellingPrice')[0].innerText.trim().replace('AED ', ''),
             "shiping_cost": "",
             "site": "noon",
+            "sku": "",
             "url": item.querySelectorAll('.product')[0].href,
           }
 

@@ -65,7 +65,14 @@ async function getProductLinks(urlToScrape) {
             "price": item.getElementsByClassName('price')[0].innerText.replace('AED', '').trim(),
             "shiping_cost": "",
             "site": "namshi",
+            "sku": "",
             "url": item.getElementsByClassName('product_listing_link')[0].href,
+          }
+
+          /** set sku */
+          let skuElement = item.dataset.sku;
+          if (skuElement.length) {
+            thisDataSet["sku"] = item.dataset.sku;
           }
 
           links.push(thisDataSet)

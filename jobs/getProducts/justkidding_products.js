@@ -65,6 +65,7 @@ async function getProductLinks(urlToScrape) {
             "price": item.readAttribute('data-v'),
             "shiping_cost": "",
             "site": "justkidding",
+            "sku": "",
             "url": item.getElementsByClassName('product-name')[0].href,
           }
 

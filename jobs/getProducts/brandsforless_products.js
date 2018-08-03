@@ -43,25 +43,28 @@ async function getProductLinks(urlToScrape) {
       .evaluate(function () {
 
         var links = [],
-          productList = document.querySelectorAll('.moduleBox'),
-          pagination = Boolean(!document.querySelectorAll('[id*=NextButton][onclick="return false;"]').length);
+          productList = document.querySelectorAll('.plp-list__item'),
+          pagination = Boolean(document.querySelectorAll('.plp-pagination__navnext')[0].href != window.location.href);
 
         /** 
          * going through each product */
         productList.forEach(function (item) {
 
+          let dataFomGTM = JSON.parse(item.getElementsByClassName("js-gtmProdData")[0].dataset.gtmProdData);
+
           let thisDataSet = {
-            "brand": item.querySelectorAll('.brandname')[0].innerText.toLowerCase(),
+            "brand": dataFomGTM.brand,
             "category": "",
             "config": "",
             "currency": "AED",
             "fulfill": "",
-            "img": item.querySelectorAll('.imageBox img')[0].src,
-            "name": item.querySelectorAll('.itemname')[0].innerText.trim().toLowerCase(),
-            "price": item.querySelectorAll('.price')[0].innerText.replace('AED', '').trim(),
+            "img": item.getElementsByClassName("comp-productcard__img")[0].src,
+            "name": dataFomGTM.name,
+            "price": dataFomGTM.price,
             "shiping_cost": "",
             "site": "brandsforless",
-            "url": item.querySelectorAll('.imageBox a')[0].href,
+            "sku": dataFomGTM.id,
+            "url": item.querySelectorAll('.comp-productcard__img')[0].href,
           }
 
           let configs = item.querySelectorAll('.cat_tags span');
@@ -99,7 +102,7 @@ async function getProductLinks(urlToScrape) {
     if (haveMore) {
       await nightmare
         .evaluate(function () {
-          document.querySelectorAll('[id*=NextButton]')[0].click();
+          document.querySelectorAll('.plp-pagination__navnext')[0].click();
         })
         .catch(error => {
           haveMore = false;

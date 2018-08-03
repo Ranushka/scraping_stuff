@@ -58,7 +58,20 @@ async function getProductLinks(urlToScrape) {
             "price": item.querySelectorAll('.comp-productcard__price')[0].innerText.trim(),
             "shiping_cost": "",
             "site": "carrefouruae",
+            "sku": "",
             "url": item.querySelectorAll(".comp-productcard__wrap > a")[0].href,
+          }
+
+          /** set image */
+          let prodImage = item.querySelectorAll('.comp-productcard__img');
+          if (prodImage.length) {
+            thisDataSet["img"] = prodImage[0].src;
+          }
+
+          /** set sku */
+          let skuElement = item.getElementsByClassName("comp-addtolist__btn")
+          if (skuElement.length) {
+            thisDataSet["sku"] = skuElement[0].dataset.productCode
           }
 
           links.push(thisDataSet);

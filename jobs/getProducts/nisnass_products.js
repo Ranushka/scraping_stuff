@@ -66,6 +66,7 @@ async function getProductLinks(urlToScrape) {
             "price": item.getElementsByClassName("Product-minPrice")[0].innerText.replace(' AED', ''),
             "shiping_cost": "",
             "site": "nisnass",
+            "sku": "",
             "url": item.getElementsByClassName("Product-details")[0].href,
           }
 
@@ -86,6 +87,12 @@ async function getProductLinks(urlToScrape) {
               })
             })
             thisDataSet["config"] = configOptions;
+          }
+
+          /** set sku */
+          let skuElement = item.getElementsByClassName("Product-details");
+          if (skuElement.length) {
+            thisDataSet["sku"] = skuElement[0].href.split("-").pop().replace('.html', '');
           }
 
           links.push(thisDataSet);

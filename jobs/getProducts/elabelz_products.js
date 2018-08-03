@@ -63,6 +63,7 @@ async function getProductLinks(urlToScrape) {
             "price": item.querySelectorAll('.price .price')[0].innerText.replace('AED ', ''),
             "shiping_cost": "",
             "site": "elabelz",
+            "sku": "",
             "url": item.href,
           }
 
@@ -80,6 +81,13 @@ async function getProductLinks(urlToScrape) {
               configOptions.push(thisitem.innerText.replace(' /', '').trim())
             })
             thisDataSet["category"] = configOptions;
+          }
+
+
+          /** set sku */
+          let skuElement = item;
+          if (skuElement) {
+            thisDataSet["sku"] = skuElement.parentElement.dataset.itemid;
           }
 
           links.push(thisDataSet)

@@ -63,6 +63,7 @@ async function getProductLinks(urlToScrape) {
             "price": item.querySelectorAll('[itemprop="price"]')[0].innerText.trim(),
             "shiping_cost": "",
             "site": "centrepointstores",
+            "sku": item.dataset.id,
             "url": item.querySelectorAll(".product-link")[0].href,
           }
 

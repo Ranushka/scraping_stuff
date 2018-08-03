@@ -67,6 +67,7 @@ async function getProductLinks(urlToScrape) {
             "price": item.getElementsByClassName('price')[0].innerText.replace('AED', ''),
             "shiping_cost": "",
             "site": "kidore",
+            "sku": "",
             "url": item.querySelectorAll('.image-wrap a')[0].href,
           }
 
@@ -75,6 +76,12 @@ async function getProductLinks(urlToScrape) {
           if (prodImage.length) {
             thisDataSet["img"] = prodImage[0].src;
           }
+
+                    /** set sku */
+                    let skuElement = item.dataset.sku;
+                    if (skuElement.length) {
+                      thisDataSet["sku"] = item.dataset.sku;
+                    }
 
           links.push(thisDataSet);
         });
