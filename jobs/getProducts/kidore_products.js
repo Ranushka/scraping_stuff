@@ -43,7 +43,7 @@ async function getProductLinks(urlToScrape) {
         var links = [],
           productList = document.querySelectorAll('.product-wrap'),
           pagination = Boolean(document.querySelectorAll('.i-next').length),
-          tagsElemnts = document.querySelectorAll('.breadcrumb li a'),
+          tagsElemnts = document.querySelectorAll('.breadcrumb li:not(:first-child)'),
           tags = [];
 
         /** 
@@ -68,6 +68,12 @@ async function getProductLinks(urlToScrape) {
             "shiping_cost": "",
             "site": "kidore",
             "url": item.querySelectorAll('.image-wrap a')[0].href,
+          }
+
+          /** set image */
+          let prodImage = item.querySelectorAll('.image-wrap img');
+          if (prodImage.length) {
+            thisDataSet["img"] = prodImage[0].src;
           }
 
           links.push(thisDataSet);
