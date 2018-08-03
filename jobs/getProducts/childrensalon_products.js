@@ -47,17 +47,43 @@ async function getProductLinks(urlToScrape) {
         productList.forEach(function (item) {
 
           let thisDataSet = {
-            "brand": "",
-            "category": item.querySelectorAll('.designer')[0].innerText.trim(),
+            "brand": item.querySelectorAll('.designer')[0].innerText.trim(),
+            "category": "",
             "config": "",
             "currency": "AED",
-            "fulfill": "",
+            "fulfill": "Aramex, DHL",
             "img": "",
             "name": item.querySelectorAll('.product-name a')[0].href,
             "price": item.querySelectorAll('.price')[0].innerText.replace('AED', '').trim(),
             "shiping_cost": "",
             "site": "childrensalon",
             "url": item.querySelectorAll('.product-name a')[0].href,
+          }
+
+          /** set image */
+          let prodImage = item.querySelectorAll('.product-item img');
+          if (prodImage.length) {
+            thisDataSet["img"] = prodImage[0].style['background-image'].replace('url("', '').replace('")', '');
+          }
+
+          /** adding config options */
+          let config = item.querySelectorAll('.options-items span');
+          if (config.length) {
+            let configOptions = []
+            config.forEach((thisitem) => {
+              configOptions.push({
+                "text": thisitem.innerText.trim(),
+                "link": "",
+              })
+            })
+            thisDataSet["config"] = configOptions;
+          }
+
+          /** set category */
+          let thisCategory = document.querySelectorAll('.category-foot-slider .ctegory-title');
+          if (thisCategory.length) {
+            thisCategory = thisCategory[0].innerText.trim()
+            thisDataSet["category"] = thisCategory;
           }
 
           links.push(thisDataSet)
