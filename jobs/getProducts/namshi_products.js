@@ -58,7 +58,7 @@ async function getProductLinks(urlToScrape) {
             "brand": "",
             "category": tags,
             "config": "",
-            "currency": "",
+            "currency": "AED",
             "fulfill": "",
             "img": "",
             "name": item.getElementsByClassName('description')[0].innerText.trim(),

@@ -48,7 +48,7 @@ async function getProductLinks(urlToScrape) {
             "brand": "",
             "category": item.dataset.pbrand,
             "config": "",
-            "currency": "",
+            "currency": "AED",
             "fulfill": "",
             "img": "",
             "name": item.title,
@@ -57,7 +57,7 @@ async function getProductLinks(urlToScrape) {
             "site": 'mumzworld',
             "url": item.href,
           }
-          
+
           links.push(thisDataSet);
         });
 
