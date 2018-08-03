@@ -53,10 +53,10 @@ async function getProductLinks(urlToScrape) {
         productList.forEach(function (item) {
 
           let thisDataSet = {
-            "brand": "",
-            "category": item.querySelectorAll('.brand')[0].innerText.trim(),
+            "brand": item.querySelectorAll('.brand')[0].innerText.trim(),
+            "category": "",
             "config": "",
-            "currency": "",
+            "currency": "AED",
             "fulfill": "",
             "img": "",
             "name": item.title,
@@ -64,6 +64,22 @@ async function getProductLinks(urlToScrape) {
             "shiping_cost": "",
             "site": "elabelz",
             "url": item.href,
+          }
+
+          /** set image */
+          let prodImage = item.querySelectorAll('.image_container img');
+          if (prodImage.length) {
+            thisDataSet["img"] = prodImage[0].src;
+          }
+
+          /** set category */
+          let thisCategorys = document.querySelectorAll('.col-main .breadcrumbs li[class^=category]');
+          if (thisCategorys.length) {
+            let configOptions = []
+            thisCategorys.forEach((thisitem) => {
+              configOptions.push(thisitem.innerText.replace(' /', '').trim())
+            })
+            thisDataSet["category"] = configOptions;
           }
 
           links.push(thisDataSet)

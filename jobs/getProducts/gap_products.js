@@ -67,7 +67,7 @@ async function getProductLinks(urlToScrape) {
             "brand": "",
             "category": data.dimension6,
             "config": "",
-            "currency": "",
+            "currency": "AED",
             "fulfill": "",
             "img": "",
             "name": data.name,
