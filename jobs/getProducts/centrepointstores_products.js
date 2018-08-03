@@ -53,10 +53,10 @@ async function getProductLinks(urlToScrape) {
         productList.forEach(function (item) {
 
           let thisDataSet = {
-            "brand": "",
+            "brand": item.querySelectorAll('[itemprop="concept"]')[0].innerText.trim(),
             "category": tags,
             "config": "",
-            "currency": "",
+            "currency": "AED",
             "fulfill": "",
             "img": "",
             "name": item.querySelectorAll('[itemprop="name"]')[0].innerText.trim(),
@@ -64,6 +64,25 @@ async function getProductLinks(urlToScrape) {
             "shiping_cost": "",
             "site": "centrepointstores",
             "url": item.querySelectorAll(".product-link")[0].href,
+          }
+
+          /** set image */
+          let prodImage = item.querySelectorAll('.product-image');
+          if (prodImage.length) {
+            thisDataSet["img"] = prodImage[0].style['background-image'].replace('url("', '').replace('")', '');
+          }
+
+          /** adding config options */
+          let config = item.querySelectorAll('.size-list.active');
+          if (config.length) {
+            let configOptions = []
+            config.forEach((thisitem) => {
+              configOptions.push({
+                "text": thisitem.innerText.trim(),
+                "link": "",
+              })
+            })
+            thisDataSet["config"] = configOptions;
           }
 
           links.push(thisDataSet);
