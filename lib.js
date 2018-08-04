@@ -131,7 +131,7 @@ var self = {
              var jsonData = JSON.stringify(data);
 
              // save data to db
-             await self.saveToDb(saveUrl, jsonData);
+             await self.saveToDb(saveUrl, jsonData, urlToScrape);
            }
          }
       } else {
@@ -141,7 +141,7 @@ var self = {
    
   },
 
-  saveToDb: async function (saveUrl, jsonData) {
+  saveToDb: async function (saveUrl, jsonData, urlToScrape) {
     await console.log('Save data Start')
     let t1 = new Date()
     
@@ -160,7 +160,7 @@ var self = {
     var t2 = new Date()
 
     let timeis = this.convertMS(t2 - t1);
-    logger.info(`Save Done - ${timeis}`)
+    logger.info(`Save Done - ${urlToScrape} - ${timeis}`)
     
   },
 
