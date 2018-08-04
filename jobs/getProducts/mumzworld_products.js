@@ -55,7 +55,7 @@ async function getProductLinks(urlToScrape) {
             "price": item.dataset.pprice,
             "shiping_cost": "",
             "site": 'mumzworld',
-            "sku": "",
+            "sku": item.dataset.sku,
             "url": item.href,
           }
 
@@ -73,12 +73,6 @@ async function getProductLinks(urlToScrape) {
               categoryItems.push(thisitem.innerText.replace(' /', '').trim())
             })
             thisDataSet["category"] = categoryItems;
-          }
-
-          /** set sku */
-          let skuElement = item.dataset.sku;
-          if (skuElement.length) {
-            thisDataSet["sku"] = item.dataset.sku;
           }
 
           links.push(thisDataSet);

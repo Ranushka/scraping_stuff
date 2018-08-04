@@ -12,7 +12,7 @@ const logger = require('./logger');
 var self = {
   nextExists: true,
   waitTime: 4000,
-  APIbaseUrl: "http://rd0sobnyof.nlnode.webrahost.eu",
+  APIbaseUrl: "http://retailroof.com",
   // APIbaseUrl: "http://localhost:60740",
 
   remainScrapeLinksCount: async function (siteName) {
